@@ -1,0 +1,28 @@
+{
+  "name": "mf-select",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://myfarms.gitlab.com/adamk33n3r/mf-select"
+  },
+  "author": {
+    "name": "Adam Keenan",
+    "email": "adam.keenan@myfarms.com"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://myfarms.gitlab.com/adamk33n3r/mf-select/issues"
+  },
+  "main": "mf-select.umd.js",
+  "module": "mf-select.js",
+  "jsnext:main": "mf-select.js",
+  "typings": "mf-select.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^4.0.0",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
