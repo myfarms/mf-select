@@ -6,6 +6,7 @@ import { Directive, ElementRef } from '@angular/core';
 export class SampleDirective {
 
   constructor(private el: ElementRef) {
+    console.log(this.el);
   }
 
 }

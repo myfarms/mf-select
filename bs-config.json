@@ -1,6 +1,6 @@
 {
   "server": {
-    "baseDir": "src",
+    "baseDir": ".playground",
     "routes": {
       "/": "playground",
       "/node_modules/": "node_modules",

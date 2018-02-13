@@ -83,7 +83,9 @@ gulp.task('rollup:fesm', function () {
 
       // Format of generated bundle
       // See "format" in https://rollupjs.org/#core-functionality
-      format: 'es'
+      output: {
+        format: 'es'
+      }
     }))
     .pipe(gulp.dest(distFolder));
 });
@@ -114,22 +116,24 @@ gulp.task('rollup:umd', function () {
         '@angular/common'
       ],
 
-      // Format of generated bundle
-      // See "format" in https://rollupjs.org/#core-functionality
-      format: 'umd',
+      output: {
+        // Format of generated bundle
+        // See "format" in https://rollupjs.org/#core-functionality
+        format: 'umd',
 
-      // Export mode to use
-      // See "exports" in https://rollupjs.org/#danger-zone
-      exports: 'named',
+        // Export mode to use
+        // See "exports" in https://rollupjs.org/#danger-zone
+        exports: 'named',
 
-      // The name to use for the module for UMD/IIFE bundles
-      // (required for bundles with exports)
-      // See "name" in https://rollupjs.org/#core-functionality
-      name: 'mf-select',
+        // The name to use for the module for UMD/IIFE bundles
+        // (required for bundles with exports)
+        // See "name" in https://rollupjs.org/#core-functionality
+        name: 'mf-select',
 
-      // See "globals" in https://rollupjs.org/#core-functionality
-      globals: {
-        typescript: 'ts'
+        // See "globals" in https://rollupjs.org/#core-functionality
+        globals: {
+          typescript: 'ts'
+        }
       }
 
     }))
