@@ -78,7 +78,8 @@ gulp.task('rollup:fesm', function () {
       // See "external" in https://rollupjs.org/#core-functionality
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        '@angular/forms',
       ],
 
       // Format of generated bundle
@@ -113,7 +114,8 @@ gulp.task('rollup:umd', function () {
       // See "external" in https://rollupjs.org/#core-functionality
       external: [
         '@angular/core',
-        '@angular/common'
+        '@angular/common',
+        '@angular/forms',
       ],
 
       output: {
@@ -187,6 +189,28 @@ gulp.task('compile', function () {
     'copy:source',
     'inline-resources',
     'ngc',
+    'rollup:umd',
+    'copy:build',
+    'clean:build',
+    'clean:tmp',
+    function (err) {
+      if (err) {
+        console.log('ERROR:', err.message);
+        deleteFolder(distFolder);
+        deleteFolder(tmpFolder);
+        deleteFolder(buildFolder);
+      } else {
+        console.log('Compilation finished succesfully');
+      }
+    });
+});
+
+gulp.task('compile:dist', function () {
+  runSequence(
+    'clean:dist',
+    'copy:source',
+    'inline-resources',
+    'ngc',
     'rollup:fesm',
     'rollup:umd',
     'copy:build',
@@ -215,8 +239,8 @@ gulp.task('watch', function () {
 
 gulp.task('clean', ['clean:dist', 'clean:tmp', 'clean:build']);
 
-gulp.task('build', ['clean', 'compile']);
-gulp.task('build:watch', ['build', 'watch']);
+gulp.task('build', ['clean', 'compile:dist']);
+gulp.task('build:watch', ['clean', 'compile', 'watch']);
 gulp.task('default', ['build:watch']);
 
 /**

@@ -1,0 +1,21 @@
+open: {{ isOpen }}
+<div class='select' [ngClass]='{ "open": isOpen }'>
+  <div class='select-selected' (click)='toggle()'>
+    <span class='placeholder'>Select...</span>
+    <i class='fa fa-caret-down'></i>
+  </div>
+  <div class='select-dropdown' [hidden]='!isOpen'>
+    <input #searchInput
+      class='select-search'
+      type='text'
+      placeholder='Search...'
+      [value]='search'
+      (input)='onSearch(searchInput.value)'
+    />
+    <div class='option-container'>
+      <div class='option' *ngFor='let item of filteredItems'>
+        {{ item }}
+      </div>
+    </div>
+  </div>
+</div>

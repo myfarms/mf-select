@@ -1,0 +1,40 @@
+.select-selected, .select-dropdown {
+    background: #eeeeee;
+    padding: 10px 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.open .select-selected {
+    border-color: #00a126;
+}
+
+.select-dropdown {
+    border-color: #00a126;
+    margin-top: 3px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+}
+
+.select-search {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.fa-caret-down {
+    float: right;
+}
+
+.option-container {
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.option {
+    padding: 2px;
+    &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, .15);
+    }
+}
