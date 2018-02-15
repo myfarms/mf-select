@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://myfarms.gitlab.com/adamk33n3r/mf-select"
+    "url": "https://myfarms.gitlab.com/myfarms/mf-select"
   },
   "author": {
     "name": "Adam Keenan",
@@ -33,7 +33,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://myfarms.gitlab.com/adamk33n3r/mf-select/issues"
+    "url": "https://myfarms.gitlab.com/myfarms/mf-select/issues"
   },
   "devDependencies": {
     "@angular/common": "^5.0.0",
