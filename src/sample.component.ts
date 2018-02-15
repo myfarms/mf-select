@@ -13,6 +13,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 @Component({
   selector: 'sample-component',
@@ -30,6 +31,7 @@ export class SampleComponent implements OnInit, AfterViewInit, OnDestroy, Contro
 
   @Input() public items: string[] = [];
   @ViewChild('searchInput') private searchInput: ElementRef;
+  @ViewChild(VirtualScrollComponent) private scrollComponent: VirtualScrollComponent;
 
   public isOpen: boolean = false;
   public isDisabled: boolean = false;
@@ -47,7 +49,7 @@ export class SampleComponent implements OnInit, AfterViewInit, OnDestroy, Contro
     private elementRef: ElementRef,
     private renderer: Renderer2
   ) {
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 1; i <= 10000; i++) {
       this.items.push(i + '');
     }
     this.filteredItems = this.items;
@@ -63,6 +65,7 @@ export class SampleComponent implements OnInit, AfterViewInit, OnDestroy, Contro
     //   console.log('onblur');
     //   this.close();
     // });
+    console.log(this.scrollComponent);
   }
 
   public ngOnDestroy() {

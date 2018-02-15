@@ -5,6 +5,10 @@
     border: 1px solid black;
 }
 
+.select-selected {
+    user-select: none;
+}
+
 .open .select-selected {
     border-color: #00a126;
 }

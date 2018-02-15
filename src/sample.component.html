@@ -12,10 +12,33 @@ open: {{ isOpen }}
       [value]='search'
       (input)='onSearch(searchInput.value)'
     />
-    <div class='option-container'>
-      <div class='option' *ngFor='let item of filteredItems'>
+    <virtual-scroll class="option-container" [bufferAmount]="4" [items]="filteredItems" (update)="viewPortItems = $event">
+        <div class="option" role="option" (click)="toggleItem(item)" (mousedown)="$event.preventDefault()" (mouseover)="false && onItemHover(item)"
+            *ngFor="let item of viewPortItems"
+        >
         {{ item }}
-      </div>
-    </div>
+
+            <!-- <ng-template #defaultOptionTemplate>
+                <span class="ng-option-label" [innerHTML]="item" ></span>
+            </ng-template>
+
+            <ng-template
+                [ngTemplateOutlet]="optionTemplate || defaultOptionTemplate"
+                [ngTemplateOutletContext]="{ item: item.value, index: item.index, searchTerm: filterValue }">
+            </ng-template> -->
+        </div>
+
+        <!-- <div class="ng-option" [class.marked]="!itemsList.markedItem" (mouseover)="itemsList.unmarkItem()" role="option" (click)="selectTag()" *ngIf="showAddTag()">
+            <span><span class="ng-tag-label">{{addTagText}}</span>"{{filterValue}}"</span>
+        </div> -->
+    </virtual-scroll>
   </div>
 </div>
+
+<!-- [disabled]="disableVirtualScroll"  -->
+<!-- [ngOptionHighlight]="filterValue" -->
+
+
+         <!-- [class.disabled]="item.disabled"
+         [class.selected]="item.selected"
+         [class.marked]="item === itemsList.markedItem" -->

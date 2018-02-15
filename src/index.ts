@@ -1,5 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { VirtualScrollModule } from 'angular2-virtual-scroll';
+
 import { SampleComponent } from './sample.component';
 import { SampleDirective } from './sample.directive';
 import { SamplePipe } from './sample.pipe';
@@ -12,7 +14,8 @@ export * from './sample.service';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    VirtualScrollModule,
   ],
   declarations: [
     SampleComponent,

@@ -10,7 +10,11 @@ import { SampleModule }  from '../dist';
 
 @Component({
   selector: 'app',
-  template: `<sample-component></sample-component>`
+  template: `
+    <div style='margin: 100px; width: 500px'>
+      <sample-component></sample-component>
+    </div>
+  `
 })
 class AppComponent {}
 

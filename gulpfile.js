@@ -80,6 +80,7 @@ gulp.task('rollup:fesm', function () {
         '@angular/core',
         '@angular/common',
         '@angular/forms',
+        'angular2-virtual-scroll',
       ],
 
       // Format of generated bundle
@@ -116,6 +117,7 @@ gulp.task('rollup:umd', function () {
         '@angular/core',
         '@angular/common',
         '@angular/forms',
+        'angular2-virtual-scroll',
       ],
 
       output: {
