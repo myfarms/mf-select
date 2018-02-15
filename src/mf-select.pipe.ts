@@ -4,10 +4,10 @@ import { Injectable, PipeTransform, Pipe } from '@angular/core';
  * Transforms any input value
  */
 @Pipe({
-  name: 'samplePipe'
+  name: 'mfSelectPipe'
 })
 @Injectable()
-export class SamplePipe implements PipeTransform {
+export class MfSelectPipe implements PipeTransform {
   transform(value: any, args: any[] = null): string {
     return value;
   }

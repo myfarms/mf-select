@@ -6,13 +6,13 @@ import { NgModule } from '@angular/core';
 import { Component } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { SampleModule }  from '../dist';
+import { MfSelectModule }  from '../dist';
 
 @Component({
   selector: 'app',
   template: `
     <div style='margin: 100px; width: 500px'>
-      <sample-component></sample-component>
+      <mf-select></mf-select>
     </div>
   `
 })
@@ -21,7 +21,7 @@ class AppComponent {}
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [ AppComponent ],
-  imports: [ BrowserModule, SampleModule ]
+  imports: [ BrowserModule, MfSelectModule ]
 })
 class AppModule {}
 

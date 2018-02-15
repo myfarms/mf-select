@@ -16,17 +16,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 @Component({
-  selector: 'sample-component',
-  templateUrl: './sample.component.html',
-  styleUrls: ['./sample.component.scss'],
+  selector: 'mf-select',
+  templateUrl: './mf-select.component.html',
+  styleUrls: ['./mf-select.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SampleComponent),
+    useExisting: forwardRef(() => MfSelectComponent),
     multi: true,
   }],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SampleComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
+export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
 
 
   @Input() public items: string[] = [];

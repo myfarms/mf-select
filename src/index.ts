@@ -2,15 +2,15 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
-import { SampleComponent } from './sample.component';
-import { SampleDirective } from './sample.directive';
-import { SamplePipe } from './sample.pipe';
-import { SampleService } from './sample.service';
+import { MfSelectComponent } from './mf-select.component';
+import { MfSelectDirective } from './mf-select.directive';
+import { MfSelectPipe } from './mf-select.pipe';
+import { MfSelectService } from './mf-select.service';
 
-export * from './sample.component';
-export * from './sample.directive';
-export * from './sample.pipe';
-export * from './sample.service';
+export * from './mf-select.component';
+export * from './mf-select.directive';
+export * from './mf-select.pipe';
+export * from './mf-select.service';
 
 @NgModule({
   imports: [
@@ -18,21 +18,21 @@ export * from './sample.service';
     VirtualScrollModule,
   ],
   declarations: [
-    SampleComponent,
-    SampleDirective,
-    SamplePipe
+    MfSelectComponent,
+    MfSelectDirective,
+    MfSelectPipe,
   ],
   exports: [
-    SampleComponent,
-    SampleDirective,
-    SamplePipe
+    MfSelectComponent,
+    MfSelectDirective,
+    MfSelectPipe,
   ]
 })
-export class SampleModule {
+export class MfSelectModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SampleModule,
-      providers: [SampleService]
+      ngModule: MfSelectModule,
+      providers: [MfSelectService]
     };
   }
 }

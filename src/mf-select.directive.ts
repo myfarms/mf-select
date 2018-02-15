@@ -1,9 +1,9 @@
 import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
-  selector: '[sampleDirective]'
+  selector: '[mfSelectDirective]'
 })
-export class SampleDirective {
+export class MfSelectDirective {
 
   constructor(private el: ElementRef) {
     console.log(this.el);
