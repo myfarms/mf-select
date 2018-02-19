@@ -11,6 +11,7 @@ import {
   OnDestroy,
   HostListener,
   AfterViewInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
@@ -24,6 +25,7 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
     useExisting: forwardRef(() => MfSelectComponent),
     multi: true,
   }],
+  encapsulation: ViewEncapsulation.None,
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
@@ -31,7 +33,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
 
   @Input() public items: string[] = [];
   @ViewChild('searchInput') private searchInput: ElementRef;
-  @ViewChild(VirtualScrollComponent) private scrollComponent: VirtualScrollComponent;
+  @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
 
   public isOpen: boolean = false;
   public isDisabled: boolean = false;
@@ -39,6 +41,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
   public filteredItems: string[] = [];
 
   private model: any = null;
+  private markedItem: number = 0;
+
+
   private onChange = (_: any) => { };
   private onTouched = () => { };
   private disposeDocumentClickListener = () => { };
@@ -49,15 +54,30 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
     private elementRef: ElementRef,
     private renderer: Renderer2
   ) {
-    for (let i = 1; i <= 10000; i++) {
-      this.items.push(i + '');
-    }
-    this.filteredItems = this.items;
+    this.items = [
+      'Kelly',
+      'Adam',
+      'Jesse',
+      'Anna',
+      'Shorty',
+      'Chris',
+      'Phil',
+      'Dylan',
+      'Laura',
+      'Henery',
+      'Texel',
+    ].sort();
+
+    // this.items = [];
+    // for (let i = 1; i <= 10000; i++) {
+    //   this.items.push(i + '');
+    // }
   }
 
   public ngOnInit() {
     this.setupDocumentClick();
-    this.open();
+    this.filteredItems = this.items;
+    // this.open();
   }
 
   public ngAfterViewInit() {
@@ -65,7 +85,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
     //   console.log('onblur');
     //   this.close();
     // });
-    console.log(this.scrollComponent);
   }
 
   public ngOnDestroy() {
@@ -77,23 +96,25 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
   // Only works when search input is focused
   @HostListener('keydown', ['$event'])
   public handleKeyDown($event: KeyboardEvent) {
-      console.log('handleKeyDown', $event.which);
+      // console.log('handleKeyDown', $event.which);
       if (KeyCode[$event.which]) {
           switch ($event.which) {
               case KeyCode.ArrowDown:
                   this.open();
-                  // markNextItem
-                  // this.dropdownList.scrollInto(this.itemsList.markedItem);
+                  this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
+                  this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
                   $event.preventDefault();
                   break;
               case KeyCode.ArrowUp:
-                  // this._handleArrowUp($event);
+                  this.markedItem = this.markedItem > 0 ? this.markedItem - 1 : 0;
+                  this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+                  $event.preventDefault();
                   break;
               case KeyCode.Space:
                   // this._handleSpace($event);
                   break;
               case KeyCode.Enter:
-                  // this._handleEnter($event);
+                  this.selectItem(this.filteredItems[this.markedItem]);
                   break;
               case KeyCode.Tab:
                   // this._handleTab($event);
@@ -129,11 +150,23 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
   }
 
   public onSearch(search: string) {
-    console.log(search);
     this.search = search;
     this.filteredItems = search ? this.items.filter((val) => {
       return val.toUpperCase().indexOf(search.toUpperCase()) > -1;
     }) : this.items;
+
+    if (this.markedItem >= this.filteredItems.length) {
+      this.markedItem = 0;
+    }
+
+    this.virtualScrollComponent.refresh();
+  }
+
+  public selectItem(item: any) {
+    this.model = item;
+    this.markedItem = this.filteredItems.indexOf(item);
+    this.onChange(item);
+    this.close();
   }
 
   /**

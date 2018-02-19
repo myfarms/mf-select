@@ -1,44 +1,34 @@
-open: {{ isOpen }}
 <div class='select' [ngClass]='{ "open": isOpen }'>
   <div class='select-selected' (click)='toggle()'>
-    <span class='placeholder'>Select...</span>
+    <span class='placeholder' *ngIf='!model'>Select...</span>
+    <span>{{ model }}</span>
     <i class='fa fa-caret-down'></i>
   </div>
-  <div class='select-dropdown' [hidden]='!isOpen'>
+  <div class='select-dropdown' [ngStyle]='{ visibility: isOpen ? "visible": "hidden"}'>
     <input #searchInput
       class='select-search'
-      type='text'
+      type='search'
       placeholder='Search...'
       [value]='search'
       (input)='onSearch(searchInput.value)'
     />
-    <virtual-scroll class="option-container" [bufferAmount]="4" [items]="filteredItems" (update)="viewPortItems = $event">
-        <div class="option" role="option" (click)="toggleItem(item)" (mousedown)="$event.preventDefault()" (mouseover)="false && onItemHover(item)"
-            *ngFor="let item of viewPortItems"
+    <virtual-scroll class="option-container"
+        [bufferAmount]="4"
+        [items]="filteredItems"
+        [scrollAnimationTime]='500'
+        (update)="viewPortItems = $event"
+    >
+        <div class="option" role="option" (click)="selectItem(item)" (mousedown)="$event.preventDefault()"
+            *ngFor="let item of viewPortItems;"
+            [class.disabled]="false"
+            [class.marked]="item === this.filteredItems[markedItem]"
+            [mfOptionHighlight]="search"
+            [innerHTML] = 'item'
         >
-        {{ item }}
-
-            <!-- <ng-template #defaultOptionTemplate>
-                <span class="ng-option-label" [innerHTML]="item" ></span>
-            </ng-template>
-
-            <ng-template
-                [ngTemplateOutlet]="optionTemplate || defaultOptionTemplate"
-                [ngTemplateOutletContext]="{ item: item.value, index: item.index, searchTerm: filterValue }">
-            </ng-template> -->
         </div>
-
-        <!-- <div class="ng-option" [class.marked]="!itemsList.markedItem" (mouseover)="itemsList.unmarkItem()" role="option" (click)="selectTag()" *ngIf="showAddTag()">
-            <span><span class="ng-tag-label">{{addTagText}}</span>"{{filterValue}}"</span>
-        </div> -->
     </virtual-scroll>
   </div>
 </div>
 
-<!-- [disabled]="disableVirtualScroll"  -->
-<!-- [ngOptionHighlight]="filterValue" -->
 
 
-         <!-- [class.disabled]="item.disabled"
-         [class.selected]="item.selected"
-         [class.marked]="item === itemsList.markedItem" -->

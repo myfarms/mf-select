@@ -141,6 +141,9 @@ gulp.task('rollup:umd', function () {
       }
 
     }))
+    .on('error', function (error) {
+      console.error(error.toString());
+    })
     .pipe(rename('mf-select.umd.js'))
     .pipe(gulp.dest(distFolder));
 });

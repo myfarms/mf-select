@@ -3,13 +3,10 @@ import { CommonModule } from '@angular/common';
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { MfSelectComponent } from './mf-select.component';
-import { MfSelectDirective } from './mf-select.directive';
-import { MfSelectPipe } from './mf-select.pipe';
+import { MfOptionHighlightDirective } from './mf-option-highlight.directive';
 import { MfSelectService } from './mf-select.service';
 
 export * from './mf-select.component';
-export * from './mf-select.directive';
-export * from './mf-select.pipe';
 export * from './mf-select.service';
 
 @NgModule({
@@ -19,13 +16,11 @@ export * from './mf-select.service';
   ],
   declarations: [
     MfSelectComponent,
-    MfSelectDirective,
-    MfSelectPipe,
+    MfOptionHighlightDirective,
   ],
   exports: [
     MfSelectComponent,
-    MfSelectDirective,
-    MfSelectPipe,
+    MfOptionHighlightDirective,
   ]
 })
 export class MfSelectModule {
