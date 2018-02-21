@@ -41,6 +41,7 @@ export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() public items: (string | object)[] = [];
   @Input() public itemLabel: string = 'name';
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
+  @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
 
   @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
