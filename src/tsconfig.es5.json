@@ -22,7 +22,7 @@
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
     "flatModuleOutFile": "mf-select.js",
-    "flatModuleId": "mf-select"
+    "flatModuleId": "@myfarms/mf-select"
   },
   "files": [
     "./index.ts"

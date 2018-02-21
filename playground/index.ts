@@ -12,13 +12,47 @@ import { MfSelectModule }  from '../dist';
   selector: 'app',
   template: `
     <div style='margin: 100px; width: 500px'>
-      <mf-select [(ngModel)]='ngModel'></mf-select>
+      <mf-select [(ngModel)]='ngModel' [items]='stringItems'></mf-select>
     </div>
 
     Model: {{ ngModel | json }}
+
+    <div style='margin: 100px; width: 500px'>
+      <mf-select [(ngModel)]='ngModelObject' [items]='objectItems'></mf-select>
+    </div>
+    Model: {{ ngModelObject | json }}
   `
 })
-class AppComponent {}
+class AppComponent {
+  public ngModel: string = 'Jenni';
+  public ngModelObject: any = {
+    id: 1,
+    name: 'Adam',
+  };
+
+  public stringItems: string[] = [
+    'Kelly',
+    'Adam',
+    'Jesse',
+    'Anna',
+    'Shorty',
+    'Chris',
+    'Phil',
+    'Dylan',
+    'Laura',
+    'Henery',
+    'Texel',
+  ].sort();
+  public objectItems: any[] = this.stringItems.map((item, idx) => {
+    return {
+      id: idx + 1,
+      name: item,
+    };
+  });
+
+  constructor() {
+  }
+}
 
 @NgModule({
   bootstrap: [ AppComponent ],

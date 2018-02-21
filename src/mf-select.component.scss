@@ -2,10 +2,6 @@
     position: relative;
     color: #444444;
 
-    .fa-caret-down {
-        float: right;
-    }
-
     .select-selected, .select-dropdown {
         background: #ffffff;
         border-radius: 5px;
@@ -15,6 +11,17 @@
     .select-selected {
         padding: 10px 15px;
         user-select: none;
+        .icons {
+            float: right;
+            .fa-times {
+                margin-right: 10px;
+                color: #aaaaaa;
+                cursor: pointer;
+                &:hover {
+                    color: #cccccc;
+                }
+            }
+        }
     }
 
     &.open .select-selected {
@@ -47,7 +54,7 @@
         box-sizing: border-box;
         position: absolute;
         width: 100%;
-        // z-index: 3;
+        z-index: 3;
 
         .option-container {
             margin-top: 5px;

@@ -26,19 +26,21 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
     multi: true,
   }],
   encapsulation: ViewEncapsulation.None,
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
 
 
-  @Input() public items: string[] = [];
+  @Input() public items: (string | object)[] = [];
+  @Input() public itemLabel: string = 'name';
+
   @ViewChild('searchInput') private searchInput: ElementRef;
   @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
 
   public isOpen: boolean = false;
   public isDisabled: boolean = false;
-  public search: string = '';
-  public filteredItems: string[] = [];
+  public searchTerm: string = '';
+  public filteredItems: (string | object)[] = [];
 
   private model: any = null;
   private markedItem: number = 0;
@@ -54,24 +56,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
     private elementRef: ElementRef,
     private renderer: Renderer2
   ) {
-    this.items = [
-      'Kelly',
-      'Adam',
-      'Jesse',
-      'Anna',
-      'Shorty',
-      'Chris',
-      'Phil',
-      'Dylan',
-      'Laura',
-      'Henery',
-      'Texel',
-    ].sort();
-
-    // this.items = [];
-    // for (let i = 1; i <= 10000; i++) {
-    //   this.items.push(i + '');
-    // }
   }
 
   public ngOnInit() {
@@ -96,34 +80,35 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
   // Only works when search input is focused
   @HostListener('keydown', ['$event'])
   public handleKeyDown($event: KeyboardEvent) {
-      // console.log('handleKeyDown', $event.which);
-      if (KeyCode[$event.which]) {
-          switch ($event.which) {
-              case KeyCode.ArrowDown:
-                  this.open();
-                  this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
-                  this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
-                  $event.preventDefault();
-                  break;
-              case KeyCode.ArrowUp:
-                  this.markedItem = this.markedItem > 0 ? this.markedItem - 1 : 0;
-                  this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
-                  $event.preventDefault();
-                  break;
-              case KeyCode.Space:
-                  // this._handleSpace($event);
-                  break;
-              case KeyCode.Enter:
-                  this.selectItem(this.filteredItems[this.markedItem]);
-                  break;
-              case KeyCode.Tab:
-                  // this._handleTab($event);
-                  break;
-              case KeyCode.Backspace:
-                  // this._handleBackspace();
-                  break;
-          }
+    // console.log('handleKeyDown', $event.which);
+    if (KeyCode[$event.which]) {
+      switch ($event.which) {
+        case KeyCode.ArrowDown:
+          this.open();
+          this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
+          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+          $event.preventDefault();
+          break;
+        case KeyCode.ArrowUp:
+          this.markedItem = this.markedItem > 0 ? this.markedItem - 1 : 0;
+          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+          $event.preventDefault();
+          break;
+        case KeyCode.Space:
+          // this._handleSpace($event);
+          break;
+        case KeyCode.Enter:
+          this.selectItem(this.filteredItems[this.markedItem]);
+          break;
+        case KeyCode.Tab:
+          // this._handleTab($event);
+          break;
+        case KeyCode.Backspace:
+          console.log('backspace');
+          // this._handleBackspace();
+          break;
       }
+    }
   }
 
   public toggle() {
@@ -150,23 +135,31 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
   }
 
   public onSearch(search: string) {
-    this.search = search;
-    this.filteredItems = search ? this.items.filter((val) => {
-      return val.toUpperCase().indexOf(search.toUpperCase()) > -1;
+    this.searchTerm = search;
+    this.filteredItems = search ? this.items.filter((item: string | object) => {
+      const value: string = typeof item === 'string' ? item : item[this.itemLabel];
+      return value.toUpperCase().indexOf(search.toUpperCase()) > -1;
     }) : this.items;
 
+    // If the marker would be outside the bounds, reset it.
     if (this.markedItem >= this.filteredItems.length) {
       this.markedItem = 0;
     }
 
+    // Refresh virtual scroll to reflect filtered items
     this.virtualScrollComponent.refresh();
   }
 
-  public selectItem(item: any) {
+  public selectItem(item: string | object) {
     this.model = item;
     this.markedItem = this.filteredItems.indexOf(item);
     this.onChange(item);
     this.close();
+  }
+
+  public getLabel(item: string | object) {
+    if (!item) { return null; }
+    return typeof item === 'string' ? item : item[this.itemLabel];
   }
 
   /**
@@ -213,6 +206,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
         return;
       }
 
+      this.changeDetectorRef.markForCheck();
       this.close();
     });
   }

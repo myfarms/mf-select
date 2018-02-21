@@ -29,7 +29,7 @@
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
       'angular2-virtual-scroll': 'npm:angular2-virtual-scroll/dist/virtual-scroll.js',
       '@tweenjs/tween.js': 'npm:@tweenjs/tween.js/src/Tween.js',
-      'mf-select': '../dist'
+      '@myfarms/mf-select': '../dist'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -47,7 +47,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'mf-select': {
+      '@myfarms/mf-select': {
         main: 'mf-select.umd.js',
         defaultExtension: 'js'
       }
