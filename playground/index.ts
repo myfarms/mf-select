@@ -21,6 +21,12 @@ import { MfSelectModule }  from '../dist';
       <mf-select [(ngModel)]='ngModelObject' [items]='objectItems'></mf-select>
     </div>
     Model: {{ ngModelObject | json }}
+
+    <h1>Dropup</h1>
+    <div style='margin: 100px; width: 500px'>
+      <mf-select [(ngModel)]='ngModelObject' [items]='objectItems' dropdownPosition='auto'></mf-select>
+    </div>
+    Model: {{ ngModelObject | json }}
   `
 })
 class AppComponent {

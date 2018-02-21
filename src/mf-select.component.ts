@@ -1,3 +1,8 @@
+/**
+ * Heavily based on the great project over at https://github.com/ng-select/ng-select
+ * @author Adam Keenan <adam.keenan@myfarms.com>
+ */
+
 import {
   Component,
   ViewChild,
@@ -12,6 +17,8 @@ import {
   HostListener,
   AfterViewInit,
   ViewEncapsulation,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
@@ -28,19 +35,24 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
+export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
 
 
   @Input() public items: (string | object)[] = [];
   @Input() public itemLabel: string = 'name';
+  @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
+  @Input() public appendTo: string;
 
+  @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
   @ViewChild('searchInput') private searchInput: ElementRef;
   @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
+
 
   public isOpen: boolean = false;
   public isDisabled: boolean = false;
   public searchTerm: string = '';
   public filteredItems: (string | object)[] = [];
+  public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'bottom';
 
   private model: any = null;
   private markedItem: number = 0;
@@ -64,17 +76,20 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
     // this.open();
   }
 
-  public ngAfterViewInit() {
-    // this.renderer.listen(this.searchInput.nativeElement, 'blur', ($event) => {
-    //   console.log('onblur');
-    //   this.close();
-    // });
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.dropdownPosition) {
+      console.log(changes.dropdownPosition);
+      this.currentDropdownPosition = changes.dropdownPosition.currentValue;
+    }
   }
 
   public ngOnDestroy() {
     this.changeDetectorRef.detach();
     this.disposeDocumentClickListener();
     this.disposeDocumentResizeListener();
+    if (this.appendTo) {
+      this.elementRef.nativeElement.appendChild(this.dropdownPanel.nativeElement);
+    }
   }
 
   // Only works when search input is focused
@@ -123,6 +138,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
       this.searchInput.nativeElement.focus();
       this.searchInput.nativeElement.select();
     });
+
+    if (this.dropdownPosition === 'auto') {
+      this.autoPositionDropdown();
+    }
+    if (this.appendTo) {
+      // this.updateAppendedDropdownPosition();
+    }
   }
 
   public close() {
@@ -218,6 +240,21 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnDestroy, Cont
 
     return <HTMLElement>this.elementRef.nativeElement.querySelector('.ng-menu-outer');
   }
+
+
+  private autoPositionDropdown() {
+    const selectRect = this.elementRef.nativeElement.getBoundingClientRect();
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const offsetTop = selectRect.top + window.pageYOffset;
+    const height = selectRect.height;
+    const dropdownHeight = this.dropdownPanel.nativeElement.getBoundingClientRect().height;
+
+    if (offsetTop + height + dropdownHeight > scrollTop + document.documentElement.clientHeight) {
+        this.currentDropdownPosition = 'top';
+    } else {
+        this.currentDropdownPosition = 'bottom';
+    }
+}
 }
 
 export enum KeyCode {
