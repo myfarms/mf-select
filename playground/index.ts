@@ -39,7 +39,12 @@ class AppComponent {
     };
   });
 
+  public tenThousandItems: string[] = [];
+
   constructor() {
+    for (let i = 1; i <= 10000; i++) {
+      this.tenThousandItems.push(i + '');
+    }
   }
 
   public addItem(search: string) {
