@@ -1,0 +1,49 @@
+<h1>MFSelect Showcase</h1>
+
+<h2>Array of Strings</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems'></mf-select>
+</div>
+
+Model: {{ ngModel | json }}
+
+<h2>Array of objects</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModelObject' [items]='objectItems'></mf-select>
+</div>
+Model: {{ ngModelObject | json }}
+
+<h2>Dropup</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' dropdownPosition='top'></mf-select>
+</div>
+
+<h2>Auto Dropdown Position</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' dropdownPosition='auto'></mf-select>
+</div>
+
+<h2>Append To Body</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' dropdownPosition='auto' appendTo='body'></mf-select>
+</div>
+
+<h2>Append To Blue Box -></h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' dropdownPosition='auto' appendTo='#bs4-container'></mf-select>
+</div>
+
+<h2>Expanded dropdown</h2>
+<div style='margin: 100px; width: 150px'>
+  <mf-select [items]='objectItems' [dropdownWidth]='500'></mf-select>
+</div>
+
+<h2>Add action</h2>
+<h3>Will send the value of the search box as the event</h3>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='stringItems' [enableAddAction]='true' (addAction)='addItem($event)'></mf-select>
+</div>
+
+<div id='bs4-container'
+  style='position:absolute; top: 1500px; left: 700px; width: 500px; height: 200px; background: rgba(0, 0, 255, 0.5);'
+></div>

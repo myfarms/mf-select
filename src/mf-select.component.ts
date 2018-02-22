@@ -13,12 +13,16 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   Input,
+  Output,
+  EventEmitter,
   OnDestroy,
   HostListener,
   AfterViewInit,
   ViewEncapsulation,
   OnChanges,
   SimpleChanges,
+  // ContentChild,
+  TemplateRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
@@ -43,10 +47,15 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
+  @Input() public enableAddAction: boolean = false;
+
+  @Output() public addAction: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
-  @ViewChild('searchInput') private searchInput: ElementRef;
+  @ViewChild('searchInput')  private searchInput: ElementRef;
   @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
+
+  // @ContentChild('searchTemplate') private searchTemplate: TemplateRef<any>;
 
 
   public isOpen: boolean = false;
@@ -195,6 +204,18 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     return typeof item === 'string' ? item : item[this.itemLabel];
   }
 
+  public onAddAction() {
+    this.addAction.emit(this.searchTerm);
+  }
+
+
+
+
+
+
+
+
+
   /**
    * ControlValueAccessor Methods
    */
@@ -235,7 +256,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
       const dropdown = this.getDropdownMenu();
       if (dropdown && dropdown.contains($event.target)) {
-        console.log('inside dropdown');
+        // console.log('inside dropdown');
         return;
       }
 
@@ -249,7 +270,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       return null;
     }
 
-    return <HTMLElement>this.elementRef.nativeElement.querySelector('.ng-menu-outer');
+    return <HTMLElement>this.dropdownPanel.nativeElement;
   }
 
 
@@ -275,7 +296,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     const offsetTop = selectRect.top - parentRect.top;
     const offsetLeft = selectRect.left - parentRect.left;
     const topDelta = this.currentDropdownPosition === 'bottom' ? selectRect.height : -(dropdownPanel.getBoundingClientRect().height + 6);
-    console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
+    // console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
     dropdownPanel.style.top = offsetTop + topDelta + 'px';
     dropdownPanel.style.bottom = 'auto';
     dropdownPanel.style.left = offsetLeft + 'px';

@@ -12,23 +12,31 @@
     [class.bottom]='currentDropdownPosition === "bottom"'
     [ngStyle]='{ visibility: isOpen ? "visible": "hidden"}'
     [style.width]='dropdownWidth + "px"'
-    >
-    <input #searchInput
-      class='select-search'
-      type='search'
-      placeholder='Search...'
-      (input)='onSearch(searchInput.value)'
-    />
-    <virtual-scroll class="option-container"
-      [bufferAmount]="4"
-      [items]="filteredItems"
+  >
+    <div class='search-container'>
+      <input #searchInput
+        type='search'
+        placeholder='Search...'
+        (input)='onSearch(searchInput.value)'
+      />
+      <i *ngIf='enableAddAction' class='fa fa-plus-circle fa-2x' (click)='onAddAction()'></i>
+      <!-- To make this better we could make the search input a separate component/directive in order to "get" it in this component. -->
+      <!-- <ng-container
+        [ngTemplateOutlet]='searchTemplate || defaultSearchTemplate'
+        [ngTemplateOutletContext]='{ item: item, searchTemplate: defaultSearchTemplate }'
+      ></ng-container> -->
+    </div>
+
+    <virtual-scroll class='option-container'
+      [bufferAmount]='4'
+      [items]='filteredItems'
       [scrollAnimationTime]='500'
-      (update)="viewPortItems = $event"
+      (update)='viewPortItems = $event'
     >
-      <div class="option" role="option" (click)="selectItem(item)" (mousedown)="$event.preventDefault()"
-        *ngFor="let item of viewPortItems;"
-        [class.marked]="item === this.filteredItems[markedItem]"
-        [mfOptionHighlight]="searchTerm"
+      <div class='option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
+        *ngFor='let item of viewPortItems;'
+        [class.marked]='item === this.filteredItems[markedItem]'
+        [mfOptionHighlight]='searchTerm'
         [innerHTML] = 'getLabel(item)'
       >
       </div>
