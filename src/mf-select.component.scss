@@ -2,13 +2,10 @@
     position: relative;
     color: #444444;
 
-    .select-selected, .select-dropdown {
+    .select-selected {
         background: #ffffff;
         border-radius: 5px;
-        border: 1px solid #ced4da
-    }
-
-    .select-selected {
+        border: 1px solid #ced4da;
         padding: 10px 15px;
         user-select: none;
         .icons {
@@ -28,6 +25,30 @@
         border-color: #00a126;
     }
 
+    .highlighted {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+}
+
+.select-dropdown {
+    background: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #00a126;
+    padding: 10px 5px;
+    color: #000000;
+    margin: 3px 0;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+    visibility: hidden;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+
+    &.top {
+        bottom: 100%;
+    }
+
     .select-search {
         width: 100%;
         padding: 8px 10px;
@@ -44,43 +65,23 @@
         }
     }
 
-    .select-dropdown {
-        padding: 10px 5px;
-        color: #000000;
-        border-color: #00a126;
-        margin: 3px 0;
-        box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
-        visibility: hidden;
-        box-sizing: border-box;
-        position: absolute;
-        width: 100%;
-        z-index: 3;
 
-        &.top {
-            bottom: 100%;
-        }
+    .option-container {
+        margin-top: 5px;
+        max-height: 200px;
+        overflow-y: auto;
 
-        .option-container {
-            margin-top: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-
-            .option {
-                cursor: pointer;
-                padding: 2px 7px;
-                &.marked {
-                    background-color: rgba(0, 161, 38, .75);
-                    color: white;
-                }
-                &:hover:not(.marked) {
-                    background-color: rgba(0, 0, 0, .15);
-                }
+        .option {
+            cursor: pointer;
+            padding: 2px 7px;
+            &.marked {
+                background-color: rgba(0, 161, 38, .75);
+                color: white;
+            }
+            &:hover:not(.marked) {
+                background-color: rgba(0, 0, 0, .15);
             }
         }
     }
-
-    .highlighted {
-        font-weight: bold;
-        text-decoration: underline;
-    }
 }
+

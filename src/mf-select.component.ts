@@ -35,7 +35,7 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
 
 
   @Input() public items: (string | object)[] = [];
@@ -74,12 +74,22 @@ export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlV
   public ngOnInit() {
     this.setupDocumentClick();
     this.filteredItems = this.items;
-    // this.open();
+  }
+
+  public ngAfterViewInit() {
+    if (this.appendTo) {
+      const parent = document.querySelector(this.appendTo);
+      if (!parent) {
+        throw new Error(`appendTo selector ${this.appendTo} did not found any parent element`)
+      }
+      parent.appendChild(this.dropdownPanel.nativeElement);
+      // this._handleDocumentResize();
+      this.updateAppendedDropdownPosition();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.dropdownPosition) {
-      console.log(changes.dropdownPosition);
       this.currentDropdownPosition = changes.dropdownPosition.currentValue;
     }
   }
@@ -144,7 +154,7 @@ export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlV
       this.autoPositionDropdown();
     }
     if (this.appendTo) {
-      // this.updateAppendedDropdownPosition();
+      this.updateAppendedDropdownPosition();
     }
   }
 
@@ -251,11 +261,26 @@ export class MfSelectComponent implements OnInit, OnChanges, OnDestroy, ControlV
     const dropdownHeight = this.dropdownPanel.nativeElement.getBoundingClientRect().height;
 
     if (offsetTop + height + dropdownHeight > scrollTop + document.documentElement.clientHeight) {
-        this.currentDropdownPosition = 'top';
+      this.currentDropdownPosition = 'top';
     } else {
-        this.currentDropdownPosition = 'bottom';
+      this.currentDropdownPosition = 'bottom';
     }
-}
+  }
+
+  private updateAppendedDropdownPosition() {
+    const select: HTMLElement = this.elementRef.nativeElement;
+    const dropdownPanel: HTMLElement = this.dropdownPanel.nativeElement;
+    const parentRect = dropdownPanel.parentElement.getBoundingClientRect();
+    const selectRect = select.getBoundingClientRect();
+    const offsetTop = selectRect.top - parentRect.top;
+    const offsetLeft = selectRect.left - parentRect.left;
+    const topDelta = this.currentDropdownPosition === 'bottom' ? selectRect.height : -(dropdownPanel.getBoundingClientRect().height + 6);
+    console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
+    dropdownPanel.style.top = offsetTop + topDelta + 'px';
+    dropdownPanel.style.bottom = 'auto';
+    dropdownPanel.style.left = offsetLeft + 'px';
+    dropdownPanel.style.width = selectRect.width + 'px';
+  }
 }
 
 export enum KeyCode {
