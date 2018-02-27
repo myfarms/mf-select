@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://myfarms.gitlab.com/myfarms/mf-select"
+    "url": "https://github.com/myfarms/mf-select"
   },
   "author": {
     "name": "Adam Keenan",
@@ -14,7 +14,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://myfarms.gitlab.com/myfarms/mf-select/issues"
+    "url": "https://github.com/myfarms/mf-select/issues"
   },
   "main": "mf-select.umd.js",
   "module": "mf-select.js",

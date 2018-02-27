@@ -1,6 +1,6 @@
 {
   "name": "@myfarms/mf-select",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://myfarms.gitlab.com/myfarms/mf-select"
+    "url": "https://github.com/myfarms/mf-select"
   },
   "author": {
     "name": "Adam Keenan",
@@ -33,7 +33,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://myfarms.gitlab.com/myfarms/mf-select/issues"
+    "url": "https://github.com/myfarms/mf-select/issues"
   },
   "devDependencies": {
     "@angular/common": "^5.0.0",
