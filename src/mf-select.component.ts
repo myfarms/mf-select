@@ -101,6 +101,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     if (changes.dropdownPosition) {
       this.currentDropdownPosition = changes.dropdownPosition.currentValue;
     }
+
+    if (changes.items) {
+      this.items = changes.items.currentValue;
+
+      // Update filteredItems
+      this.onSearch(this.searchTerm);
+    }
   }
 
   public ngOnDestroy() {

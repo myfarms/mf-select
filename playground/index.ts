@@ -32,6 +32,7 @@ class AppComponent {
     'Henery',
     'Texel',
   ].sort();
+
   public objectItems: any[] = this.stringItems.map((item, idx) => {
     return {
       id: idx + 1,
@@ -49,6 +50,14 @@ class AppComponent {
 
   public addItem(search: string) {
     alert(`Add Action: ${search}`);
+  }
+
+  public changeItems() {
+    this.stringItems = [
+      'first',
+      'second',
+      'last',
+    ];
   }
 }
 
