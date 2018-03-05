@@ -1,3 +1,7 @@
+<div class='mf-overlay-container' *ngIf='isOpen'>
+  <div class='mf-overlay' (click)='isOpen = false'></div>
+</div>
+
 <div class='select' [ngClass]='{ "open": isOpen }'>
   <div class='select-selected' (click)='toggle()'>
     <span class='placeholder' *ngIf='!model'>Select...</span>

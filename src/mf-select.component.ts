@@ -70,8 +70,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   private onChange = (_: any) => { };
   private onTouched = () => { };
-  private disposeDocumentClickListener = () => { };
-  private disposeDocumentResizeListener = () => { };
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -81,7 +79,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public ngOnInit() {
-    this.setupDocumentClick();
     this.filteredItems = this.items;
   }
 
@@ -112,8 +109,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public ngOnDestroy() {
     this.changeDetectorRef.detach();
-    this.disposeDocumentClickListener();
-    this.disposeDocumentResizeListener();
     if (this.appendTo) {
       this.elementRef.nativeElement.appendChild(this.dropdownPanel.nativeElement);
     }
@@ -245,32 +240,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.onTouched = fn;
   }
 
-  public setDisabledState?(isDisabled: boolean): void {
+  public setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 
 
 
 
-
-  private setupDocumentClick() {
-    this.disposeDocumentClickListener = this.renderer.listen('window', 'click', ($event: any) => {
-      // Don't close if clicked on select
-      if (this.elementRef.nativeElement.contains($event.target)) {
-        // console.log('inside select');
-        return;
-      }
-
-      const dropdown = this.getDropdownMenu();
-      if (dropdown && dropdown.contains($event.target)) {
-        // console.log('inside dropdown');
-        return;
-      }
-
-      this.changeDetectorRef.markForCheck();
-      this.close();
-    });
-  }
 
   private getDropdownMenu(): HTMLElement {
     if (!this.isOpen /*|| !this.dropdownList*/) {
