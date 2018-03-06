@@ -23,15 +23,15 @@
     position: relative;
     color: #444444;
 
-    .select-selected {
+    .mf-select-selected {
         background: #ffffff;
         border-radius: 5px;
         border: 1px solid #ced4da;
         padding: 10px 15px;
         user-select: none;
-        .icons {
+        .mf-icons {
             float: right;
-            .clear {
+            .mf-clear {
                 cursor: pointer;
                 position: relative;
 
@@ -59,7 +59,7 @@
                 }
             }
 
-            .caret {
+            .mf-caret {
                 position: relative;
                 margin-left: 20px;
 
@@ -76,11 +76,11 @@
         }
     }
 
-    &.open .select-selected {
+    &.open .mf-select-selected {
         border-color: #00a126;
     }
 
-    .highlighted {
+    .mf-highlighted {
         font-weight: bold;
         text-decoration: underline;
     }
@@ -104,7 +104,7 @@
         bottom: 100%;
     }
 
-    .search-container {
+    .mf-search-container {
         display: flex;
 
         input[type="search"] {
@@ -122,19 +122,19 @@
     }
 
 
-    .option-container {
+    .mf-option-container {
         margin-top: 5px;
         max-height: 200px;
         overflow-y: auto;
 
-        .option {
+        .mf-option {
             cursor: pointer;
             padding: 2px 7px;
-            &.marked {
+            &.mf-marked {
                 background-color: hsla(134, 100%, 32%, 0.75);
                 color: white;
             }
-            &:hover:not(.marked) {
+            &:hover:not(.mf-marked) {
                 background-color: hsla(0, 0%, 0%, 0.15);
             }
         }

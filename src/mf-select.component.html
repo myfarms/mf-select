@@ -3,8 +3,8 @@
 </div>
 
 <div class='mf-select' [ngClass]='{ "open": isOpen }'>
-  <div class='select-selected' (click)='open()'>
-    <span class='placeholder' *ngIf='!model'>Select...</span>
+  <div class='mf-select-selected' (click)='open()'>
+    <span *ngIf='!model'>Select...</span>
     <span *ngIf='model'>
       <ng-template #defaultSelectedTemplate>
         <span>{{ getLabel(model) }}</span>
@@ -14,9 +14,9 @@
         [ngTemplateOutletContext]='{ select: this, selected: model }'
       ></ng-container>
     </span>
-    <span class='icons'>
-      <i class='clear' *ngIf='model' (click)='selectItem(null); $event.stopPropagation()'></i>
-      <i class='caret'></i>
+    <span class='mf-icons'>
+      <i class='mf-clear' *ngIf='model' (click)='selectItem(null); $event.stopPropagation()'></i>
+      <i class='mf-caret'></i>
     </span>
   </div>
   <div class='mf-select-dropdown' #dropdownPanel
@@ -25,7 +25,7 @@
     [ngStyle]='{ visibility: isOpen ? "visible": "hidden"}'
     [style.width]='dropdownWidth + "px"'
   >
-    <div class='search-container'>
+    <div class='mf-search-container'>
       <ng-container
         [ngTemplateOutlet]='searchTemplateLeft'
         [ngTemplateOutletContext]='{ select: this }'
@@ -42,13 +42,13 @@
       ></ng-container>
     </div>
 
-    <virtual-scroll class='option-container'
+    <virtual-scroll class='mf-option-container'
       [bufferAmount]='4'
       [items]='filteredItems'
       [scrollAnimationTime]='500'
       (update)='viewPortItems = $event'
     >
-      <div class='option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
+      <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
         *ngFor='let item of viewPortItems;'
         [class.marked]='item === this.filteredItems[markedItem]'
       >
