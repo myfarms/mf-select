@@ -53,7 +53,31 @@ Model: {{ ngModelObject | json }}
 <h2>Add action</h2>
 <h3>Will send the value of the search box as the event</h3>
 <div style='margin: 100px; width: 500px'>
-  <mf-select [items]='stringItems' [enableAddAction]='true' (addAction)='addItem($event)'></mf-select>
+  <ng-template #buttonTemplate>
+    <button class='btn btn-primary' style='margin-left: 10px;' (click)='addItem(select.searchTerm)'>ADD</button>
+  </ng-template>
+  <mf-select [items]='stringItems' [searchTemplateRight]='buttonTemplate' #select></mf-select>
+</div>
+
+<h2>Custom Templates</h2>
+<div style='margin: 100px; width: 500px'>
+  <ng-template #option let-item='item'>
+    <div style='color: red'>{{ item.name }}</div>
+    <div style='font-weight: bold; font-style: italic'>ID: {{ item.id }}</div>
+  </ng-template>
+  <ng-template #selected let-selectedItem='selected'>
+    <span style='color: deepskyblue; text-transform: uppercase'>{{ selectedItem.name }}</span>
+  </ng-template>
+  <ng-template #left>
+    <span style='font-size: 28px; margin: 0 10px'>★</span>
+  </ng-template>
+  <mf-select
+    dropdownPosition='top'
+    [items]='objectItems'
+    [optionTemplate]='option'
+    [selectedTemplate]='selected'
+    [searchTemplateLeft]='left'
+  ></mf-select>
 </div>
 
 <div id='bs4-container'

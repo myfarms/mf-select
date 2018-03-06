@@ -119,33 +119,6 @@
                 border: 1px solid #00a126;
             }
         }
-
-        button {
-            width: 48px;
-            margin-left: 5px;
-            color: #fff;
-            background-color: #007b1d;
-            border-color: #006e1a;
-            outline: none;
-            border: 1px solid transparent;
-            border-radius: 0.2rem;
-        }
-
-        i {
-            align-self: center;
-            margin-left: 5px;
-            cursor: pointer;
-            color: #999999;
-            transition: color 150ms ease-in-out;
-
-            &:hover {
-                color: hsla(134, 100%, 32%, 0.75);
-            }
-
-            &:active {
-                color: hsla(134, 100%, 25%, 0.75);
-            }
-        }
     }
 
 

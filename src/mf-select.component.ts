@@ -44,7 +44,6 @@ export type MfSelectItem = string | object;
 })
 export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
 
-
   @Input() public items: MfSelectItem[] = [];
   @Input() public itemLabel: string = 'name';
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
@@ -52,14 +51,16 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public appendTo: string;
   @Input() public enableAddAction: boolean = false;
 
-  @Output() public addAction: EventEmitter<string> = new EventEmitter<string>();
   @Output() public change: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
   @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
   @ViewChild('searchInput')  private searchInput: ElementRef;
   @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
 
-  // @ContentChild('searchTemplate') private searchTemplate: TemplateRef<any>;
+  @Input() private searchTemplateLeft: TemplateRef<any>;
+  @Input() private searchTemplateRight: TemplateRef<any>;
+  @Input() private selectedTemplate: TemplateRef<any>;
+  @Input() private optionTemplate: TemplateRef<any>;
 
 
   public isOpen: boolean = false;
@@ -213,10 +214,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public getLabel(item: MfSelectItem) {
     if (!item) { return null; }
     return typeof item === 'string' ? item : item[this.itemLabel];
-  }
-
-  public onAddAction() {
-    this.addAction.emit(this.searchTerm);
   }
 
 

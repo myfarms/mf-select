@@ -5,7 +5,15 @@
 <div class='mf-select' [ngClass]='{ "open": isOpen }'>
   <div class='select-selected' (click)='open()'>
     <span class='placeholder' *ngIf='!model'>Select...</span>
-    <span>{{ getLabel(model) }}</span>
+    <span *ngIf='model'>
+      <ng-template #defaultSelectedTemplate>
+        <span>{{ getLabel(model) }}</span>
+      </ng-template>
+      <ng-container
+        [ngTemplateOutlet]='selectedTemplate || defaultSelectedTemplate'
+        [ngTemplateOutletContext]='{ select: this, selected: model }'
+      ></ng-container>
+    </span>
     <span class='icons'>
       <i class='clear' *ngIf='model' (click)='selectItem(null); $event.stopPropagation()'></i>
       <i class='caret'></i>
@@ -18,17 +26,20 @@
     [style.width]='dropdownWidth + "px"'
   >
     <div class='search-container'>
+      <ng-container
+        [ngTemplateOutlet]='searchTemplateLeft'
+        [ngTemplateOutletContext]='{ select: this }'
+      ></ng-container>
       <input #searchInput
         type='search'
         placeholder='Search...'
         (input)='onSearch(searchInput.value)'
       />
-      <i *ngIf='enableAddAction' class='fa fa-plus-circle fa-2x' (click)='onAddAction()'></i>
       <!-- To make this better we could make the search input a separate component/directive in order to "get" it in this component. -->
-      <!-- <ng-container
-        [ngTemplateOutlet]='searchTemplate || defaultSearchTemplate'
-        [ngTemplateOutletContext]='{ item: item, searchTemplate: defaultSearchTemplate }'
-      ></ng-container> -->
+      <ng-container
+        [ngTemplateOutlet]='searchTemplateRight'
+        [ngTemplateOutletContext]='{ select: this }'
+      ></ng-container>
     </div>
 
     <virtual-scroll class='option-container'
@@ -40,9 +51,14 @@
       <div class='option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
         *ngFor='let item of viewPortItems;'
         [class.marked]='item === this.filteredItems[markedItem]'
-        [mfOptionHighlight]='searchTerm'
-        [innerHTML] = 'getLabel(item)'
       >
+        <ng-template #defaultOptionTemplate>
+          <div [innerHTML]='getLabel(item)' [mfOptionHighlight]='searchTerm'></div>
+        </ng-template>
+        <ng-container
+          [ngTemplateOutlet]='optionTemplate || defaultOptionTemplate'
+          [ngTemplateOutletContext]='{ select: this, item: item }'
+        ></ng-container>
       </div>
     </virtual-scroll>
   </div>
