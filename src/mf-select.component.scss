@@ -21,6 +21,7 @@
 .select {
     position: relative;
     color: #444444;
+    z-index: 1001;
 
     .select-selected {
         background: #ffffff;
