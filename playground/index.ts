@@ -58,6 +58,16 @@ class AppComponent {
       'second',
       'last',
     ];
+
+    this.ngModel = 'second';
+  }
+
+  public changeModel() {
+    this.ngModel = 'Adam';
+  }
+
+  public onChange(item: any) {
+    console.log(item);
   }
 }
 

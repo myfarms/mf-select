@@ -5,17 +5,18 @@
 
 <h2>Array of Strings</h2>
 <div style='margin: 100px; width: 500px'>
-  <mf-select [(ngModel)]='ngModel' [items]='stringItems'></mf-select>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems' (change)='onChange($event)'></mf-select>
 </div>
 
 Model: {{ ngModel | json }}
 <button (click)='changeItems()'>Change Items</button>
+<button (click)='changeModel()'>Change Model</button>
 
 {{ stringItems | json }}
 
 <h2>Array of Objects</h2>
 <div style='margin: 100px; width: 500px'>
-  <mf-select [(ngModel)]='ngModelObject' [items]='objectItems'></mf-select>
+  <mf-select [(ngModel)]='ngModelObject' [items]='objectItems' (change)='onChange($event)'></mf-select>
 </div>
 Model: {{ ngModelObject | json }}
 

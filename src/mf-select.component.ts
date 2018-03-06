@@ -23,9 +23,12 @@ import {
   SimpleChanges,
   // ContentChild,
   TemplateRef,
+  ViewRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
+
+export type MfSelectItem = string | object;
 
 @Component({
   selector: 'mf-select',
@@ -42,7 +45,7 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
 
 
-  @Input() public items: (string | object)[] = [];
+  @Input() public items: MfSelectItem[] = [];
   @Input() public itemLabel: string = 'name';
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
   @Input() public dropdownWidth: number;
@@ -50,6 +53,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public enableAddAction: boolean = false;
 
   @Output() public addAction: EventEmitter<string> = new EventEmitter<string>();
+  @Output() public change: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
   @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
   @ViewChild('searchInput')  private searchInput: ElementRef;
@@ -61,14 +65,20 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public isOpen: boolean = false;
   public isDisabled: boolean = false;
   public searchTerm: string = '';
-  public filteredItems: (string | object)[] = [];
+  public filteredItems: MfSelectItem[] = [];
   public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'bottom';
 
-  private model: any = null;
-  private markedItem: number = 0;
+  private model: MfSelectItem = null;
+  private _markedItem: number = 0;
+  private set markedItem(val: number) {
+    this._markedItem = Math.max(val, 0);
+  }
+  private get markedItem(): number {
+    return this._markedItem;
+  }
 
 
-  private onChange = (_: any) => { };
+  private onChange = (_: MfSelectItem) => { };
   private onTouched = () => { };
 
   constructor(
@@ -175,12 +185,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
 
     this.isOpen = false;
-    // Maybe clear search?
   }
 
   public onSearch(search: string) {
     this.searchTerm = search;
-    this.filteredItems = search ? this.items.filter((item: string | object) => {
+    this.filteredItems = search ? this.items.filter((item: MfSelectItem) => {
       const value: string = typeof item === 'string' ? item : item[this.itemLabel];
       return value.toUpperCase().indexOf(search.toUpperCase()) > -1;
     }) : this.items || [];
@@ -194,14 +203,14 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.virtualScrollComponent.refresh();
   }
 
-  public selectItem(item: string | object) {
-    this.model = item;
-    this.markedItem = this.filteredItems.indexOf(item);
-    this.onChange(item);
+  public selectItem(item: MfSelectItem) {
+    this.updateNgModel(item);
+    this.markedItem = this.filteredItems.indexOf(this.model);
+    this.onChange(this.model);
     this.close();
   }
 
-  public getLabel(item: string | object) {
+  public getLabel(item: MfSelectItem) {
     if (!item) { return null; }
     return typeof item === 'string' ? item : item[this.itemLabel];
   }
@@ -221,11 +230,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   /**
    * ControlValueAccessor Methods
    */
-  public writeValue(value: any | any[]): void {
-    this.model = value;
-    // this._validateWriteValue(value);
-    // this.itemsList.clearSelected();
-    // this._selectWriteValue(value);
+  public writeValue(value: MfSelectItem): void {
+    this.selectItem(value);
 
     if (!(<any>this.changeDetectorRef).destroyed) {
       this.changeDetectorRef.detectChanges();
@@ -245,8 +251,15 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
 
+  private updateNgModel(value: MfSelectItem) {
+    this.model = value;
+    this.change.emit(this.model);
+  }
 
 
+  /**
+   * Positioning Methods
+   */
 
   private getDropdownMenu(): HTMLElement {
     if (!this.isOpen /*|| !this.dropdownList*/) {
