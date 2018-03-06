@@ -79,7 +79,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public ngOnInit() {
-    this.filteredItems = this.items;
+    this.filteredItems = this.items || [];
   }
 
   public ngAfterViewInit() {
@@ -183,7 +183,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.filteredItems = search ? this.items.filter((item: string | object) => {
       const value: string = typeof item === 'string' ? item : item[this.itemLabel];
       return value.toUpperCase().indexOf(search.toUpperCase()) > -1;
-    }) : this.items;
+    }) : this.items || [];
 
     // If the marker would be outside the bounds, reset it.
     if (this.markedItem >= this.filteredItems.length) {
