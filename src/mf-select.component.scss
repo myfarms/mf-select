@@ -25,6 +25,7 @@
 }
 
 .mf-select {
+    display: block;
     position: relative;
     color: #444444;
     font-size: 16px;
@@ -67,6 +68,27 @@
 
     &.open .mf-select-selected {
         border-color: #00a126;
+    }
+
+    &.disabled {
+        color: #999999;
+
+        .mf-select-selected {
+            background-color: #f9f9f9;
+
+            .mf-icons {
+                .mf-clear {
+                    cursor: default;
+                    &:hover {
+                        background-position-x: initial;
+                    }
+                }
+
+                .mf-caret {
+                    filter: contrast(0%);
+                }
+            }
+        }
     }
 
     .mf-highlighted {

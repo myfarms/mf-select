@@ -24,6 +24,7 @@ import {
   // ContentChild,
   TemplateRef,
   ViewRef,
+  HostBinding,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
@@ -63,11 +64,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() private optionTemplate: TemplateRef<any>;
 
 
-  public isOpen: boolean = false;
-  public isDisabled: boolean = false;
   public searchTerm: string = '';
   public filteredItems: MfSelectItem[] = [];
   public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'bottom';
+
+  @HostBinding('class') public parentClass = 'mf-select';
+  @HostBinding('class.open') public isOpen: boolean = false;
+  @HostBinding('class.disabled') public isDisabled: boolean = false;
 
   private model: MfSelectItem = null;
   private _markedItem: number = 0;
@@ -164,6 +167,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public open() {
+    if (this.isDisabled || this.isOpen) { return; }
+
     this.isOpen = true;
 
     // Focus search and select all text
@@ -181,7 +186,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public close() {
-    if (!this.isOpen) {
+    if (this.isDisabled || !this.isOpen) {
       return;
     }
 
@@ -205,6 +210,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public selectItem(item: MfSelectItem) {
+    if (this.isDisabled) { return; }
     this.updateNgModel(item);
     this.markedItem = this.filteredItems.indexOf(this.model);
     this.onChange(this.model);

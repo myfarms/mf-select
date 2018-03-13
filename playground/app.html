@@ -5,12 +5,13 @@
 
 <h2>Array of Strings</h2>
 <div style='margin: 100px; width: 500px'>
-  <mf-select [(ngModel)]='ngModel' [items]='stringItems' (change)='onChange($event)'></mf-select>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems' (change)='onChange($event)' [disabled]='disabled'></mf-select>
 </div>
 
 Model: {{ ngModel | json }}
 <button (click)='changeItems()'>Change Items</button>
 <button (click)='changeModel()'>Change Model</button>
+<button (click)='disabled = !disabled'>Toggle Disable</button>
 
 {{ stringItems | json }}
 
