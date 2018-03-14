@@ -55,7 +55,7 @@ Model: {{ ngModelObject | json }}
 <h3>Will send the value of the search box as the event</h3>
 <div style='margin: 100px; width: 500px'>
   <ng-template #buttonTemplate>
-    <button class='btn btn-primary' style='margin-left: 10px;' (click)='addItem(select.searchTerm)'>ADD</button>
+    <button class='btn btn-primary' (click)='addItem(select.searchTerm)'>ADD</button>
   </ng-template>
   <mf-select [items]='stringItems' [searchTemplateRight]='buttonTemplate' #select></mf-select>
 </div>
@@ -70,7 +70,7 @@ Model: {{ ngModelObject | json }}
     <span style='color: deepskyblue; text-transform: uppercase'>{{ selectedItem.name }}</span>
   </ng-template>
   <ng-template #left>
-    <span style='font-size: 28px; margin: 0 10px'>★</span>
+    <span style='font-size: 28px; margin-left: 10px'>★</span>
   </ng-template>
   <mf-select
     dropdownPosition='top'

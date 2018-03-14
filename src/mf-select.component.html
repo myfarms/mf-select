@@ -26,20 +26,24 @@
     [style.width]='dropdownWidth + "px"'
   >
     <div class='mf-search-container'>
-      <ng-container
-        [ngTemplateOutlet]='searchTemplateLeft'
-        [ngTemplateOutletContext]='{ select: this }'
-      ></ng-container>
+      <div [style.margin-right]='searchTemplateLeft ? "10px" : ""'>
+        <ng-container
+          [ngTemplateOutlet]='searchTemplateLeft'
+          [ngTemplateOutletContext]='{ select: this }'
+        ></ng-container>
+      </div>
       <input #searchInput
         type='search'
         placeholder='Search...'
         (input)='onSearch(searchInput.value)'
       />
       <!-- To make this better we could make the search input a separate component/directive in order to "get" it in this component. -->
-      <ng-container
-        [ngTemplateOutlet]='searchTemplateRight'
-        [ngTemplateOutletContext]='{ select: this }'
-      ></ng-container>
+      <div [style.margin-left]='searchTemplateRight ? "10px" : ""'>
+        <ng-container
+          [ngTemplateOutlet]='searchTemplateRight'
+          [ngTemplateOutletContext]='{ select: this }'
+        ></ng-container>
+      </div>
     </div>
 
     <virtual-scroll class='mf-option-container'
