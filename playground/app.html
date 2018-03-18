@@ -21,6 +21,11 @@ Model: {{ ngModel | json }}
 </div>
 Model: {{ ngModelObject | json }}
 
+<h2>Custom placeholder</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' placeholder='Select an item...'></mf-select>
+</div>
+
 <h2>10,000 items</h2>
 <div style='margin: 100px; width: 500px'>
   <mf-select [items]='tenThousandItems'></mf-select>

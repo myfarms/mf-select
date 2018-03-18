@@ -51,6 +51,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
   @Input() public enableAddAction: boolean = false;
+  @Input() public placeholder: string = 'Select...';
 
   @Output() public change: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 

@@ -4,7 +4,7 @@
 
 <div>
   <div class='mf-select-selected' (click)='open()'>
-    <span *ngIf='!model'>Select...</span>
+    <span *ngIf='!model'>{{ placeholder }}</span>
     <span *ngIf='model'>
       <ng-template #defaultSelectedTemplate>
         <span>{{ getLabel(model) }}</span>
