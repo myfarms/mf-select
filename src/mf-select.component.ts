@@ -156,7 +156,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           // this._handleTab($event);
           break;
         case KeyCode.Backspace:
-          console.log('backspace');
+          //console.log('backspace');
           // this._handleBackspace();
           break;
       }

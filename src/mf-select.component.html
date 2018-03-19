@@ -35,7 +35,8 @@
       <input #searchInput
         type='search'
         placeholder='Search...'
-        (input)='onSearch(searchInput.value)'
+        (input)='onSearch(searchInput.value); $event.stopPropagation()'
+        (change)='$event.stopPropagation()'
       />
       <!-- To make this better we could make the search input a separate component/directive in order to "get" it in this component. -->
       <div [style.margin-left]='searchTemplateRight ? "10px" : ""'>

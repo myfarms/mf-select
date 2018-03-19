@@ -67,7 +67,7 @@ class AppComponent {
   }
 
   public onChange(item: any) {
-    console.log(item);
+    console.log('onChange:', item);
   }
 }
 
