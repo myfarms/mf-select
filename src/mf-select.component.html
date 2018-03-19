@@ -55,7 +55,7 @@
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
         *ngFor='let item of viewPortItems;'
-        [class.marked]='item === this.filteredItems[markedItem]'
+        [class.mf-marked]='item === this.filteredItems[markedItem]'
       >
         <ng-template #defaultOptionTemplate>
           <div [innerHTML]='getLabel(item)' [mfOptionHighlight]='searchTerm'></div>
