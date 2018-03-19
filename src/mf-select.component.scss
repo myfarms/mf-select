@@ -90,11 +90,6 @@
             }
         }
     }
-
-    .mf-highlighted {
-        font-weight: bold;
-        text-decoration: underline;
-    }
 }
 
 .mf-select-dropdown {
@@ -144,12 +139,19 @@
         .mf-option {
             cursor: pointer;
             padding: 2px 7px;
+
             &.mf-marked {
                 background-color: hsla(134, 100%, 32%, 0.75);
                 color: white;
             }
+
             &:hover:not(.mf-marked) {
                 background-color: hsla(0, 0%, 0%, 0.15);
+            }
+
+            .mf-highlighted {
+                font-weight: bold;
+                text-decoration: underline;
             }
         }
     }

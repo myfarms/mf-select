@@ -16,7 +16,7 @@ export class MfOptionHighlightDirective implements OnChanges {
     let html = this.innerHTML;
     if (indexOfTerm > -1) {
       html = this.innerHTML.substring(0, indexOfTerm)
-            + '<span class=\'highlighted\'>' + this.innerHTML.substr(indexOfTerm, label.length) + '</span>'
+            + '<span class=\'mf-highlighted\'>' + this.innerHTML.substr(indexOfTerm, label.length) + '</span>'
             + this.innerHTML.substring(indexOfTerm + label.length, this.innerHTML.length);
     }
     this.setInnerHTML(html);
