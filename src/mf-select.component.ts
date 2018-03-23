@@ -53,7 +53,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public enableAddAction: boolean = false;
   @Input() public placeholder: string = 'Select...';
 
-  @Output() public change: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
+  @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
   @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
   @ViewChild('searchInput')  private searchInput: ElementRef;
@@ -257,7 +257,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   private updateNgModel(value: MfSelectItem) {
     this.model = value;
-    this.change.emit(this.model);
+    this.update.emit(this.model);
   }
 
 
