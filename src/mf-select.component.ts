@@ -235,7 +235,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
    * ControlValueAccessor Methods
    */
   public writeValue(value: MfSelectItem): void {
-    this.selectItem(value);
+    this.updateNgModel(value);
+    this.markedItem = this.filteredItems.indexOf(this.model);
 
     if (!(<any>this.changeDetectorRef).destroyed) {
       this.changeDetectorRef.detectChanges();
