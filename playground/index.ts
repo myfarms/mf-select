@@ -59,7 +59,7 @@ class AppComponent {
       'last',
     ];
 
-    this.ngModel = 'second';
+    this.ngModel = this.stringItems[1];
   }
 
   public changeModel() {

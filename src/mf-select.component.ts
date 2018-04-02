@@ -93,11 +93,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   ) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.filteredItems = this.items || [];
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     if (this.appendTo) {
       const parent = document.querySelector(this.appendTo);
       if (!parent) {
@@ -109,7 +109,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (changes.dropdownPosition) {
       this.currentDropdownPosition = changes.dropdownPosition.currentValue;
     }
@@ -122,7 +122,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.changeDetectorRef.detach();
     if (this.appendTo) {
       this.elementRef.nativeElement.appendChild(this.dropdownPanel.nativeElement);
@@ -131,7 +131,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   // Only works when search input is focused
   @HostListener('keydown', ['$event'])
-  public handleKeyDown($event: KeyboardEvent) {
+  public handleKeyDown($event: KeyboardEvent): void {
     // console.log('handleKeyDown', $event.which);
     if (KeyCode[$event.which]) {
       switch ($event.which) {
@@ -163,11 +163,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  public toggle() {
+  public toggle(): void {
     this.isOpen ? this.close() : this.open();
   }
 
-  public open() {
+  public open(): void {
     if (this.isDisabled || this.isOpen) { return; }
 
     this.isOpen = true;
@@ -186,7 +186,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  public close() {
+  public close(): void {
     if (this.isDisabled || !this.isOpen) {
       return;
     }
@@ -194,10 +194,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.isOpen = false;
   }
 
-  public onSearch(search: string) {
+  public onSearch(search: string): void {
     this.searchTerm = search;
     this.filteredItems = search ? this.items.filter((item: MfSelectItem) => {
-      const value: string = typeof item === 'string' ? item : item[this.itemLabel];
+      const value: string = this.getLabel(item);
       return value.toUpperCase().indexOf(search.toUpperCase()) > -1;
     }) : this.items || [];
 
@@ -210,7 +210,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.virtualScrollComponent.refresh();
   }
 
-  public selectItem(item: MfSelectItem) {
+  public selectItem(item: MfSelectItem): void {
     if (this.isDisabled) { return; }
     this.updateNgModel(item);
     this.markedItem = this.filteredItems.indexOf(this.model);
@@ -218,9 +218,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.close();
   }
 
-  public getLabel(item: MfSelectItem) {
+  public getLabel(item: MfSelectItem): string {
     if (!item) { return null; }
-    return typeof item === 'string' ? item : item[this.itemLabel];
+    return typeof item === 'string' ? item : (item[this.itemLabel] || item.toString());
   }
 
 
@@ -255,7 +255,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
 
-  private updateNgModel(value: MfSelectItem) {
+  private updateNgModel(value: MfSelectItem): void {
     this.model = value;
     this.update.emit(this.model);
   }
@@ -274,7 +274,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
 
-  private autoPositionDropdown() {
+  private autoPositionDropdown(): void {
     const selectRect = this.elementRef.nativeElement.getBoundingClientRect();
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const offsetTop = selectRect.top + window.pageYOffset;
@@ -288,7 +288,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  private updateAppendedDropdownPosition() {
+  private updateAppendedDropdownPosition(): void {
     const select: HTMLElement = this.elementRef.nativeElement;
     const dropdownPanel: HTMLElement = this.dropdownPanel.nativeElement;
     const parentRect = dropdownPanel.parentElement.getBoundingClientRect();
