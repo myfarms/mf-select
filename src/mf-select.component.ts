@@ -16,14 +16,11 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  HostListener,
   AfterViewInit,
   ViewEncapsulation,
   OnChanges,
   SimpleChanges,
-  // ContentChild,
   TemplateRef,
-  ViewRef,
   HostBinding,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -73,6 +70,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @HostBinding('class.open') public isOpen: boolean = false;
   @HostBinding('class.disabled') public isDisabled: boolean = false;
 
+  public get selectedItem() {
+    return this.model;
+  }
   private model: MfSelectItem = null;
   private _markedItem: number = 0;
   private set markedItem(val: number) {
@@ -130,8 +130,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   // Only works when search input is focused
-  @HostListener('keydown', ['$event'])
-  public handleKeyDown($event: KeyboardEvent): void {
+  public onKeydown($event: KeyboardEvent): void {
     // console.log('handleKeyDown', $event.which);
     if (KeyCode[$event.which]) {
       switch ($event.which) {
@@ -156,7 +155,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           // this._handleTab($event);
           break;
         case KeyCode.Backspace:
-          //console.log('backspace');
+          // console.log('backspace');
           // this._handleBackspace();
           break;
       }
