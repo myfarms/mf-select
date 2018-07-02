@@ -9,7 +9,6 @@ import {
   ElementRef,
   forwardRef,
   OnInit,
-  Renderer2,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   Input,
@@ -27,6 +26,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 export type MfSelectItem = string | object;
+
+export enum KeyCode {
+  Tab = 9,
+  Enter = 13,
+  Esc = 27,
+  Space = 32,
+  ArrowUp = 38,
+  ArrowDown = 40,
+  Backspace = 8
+}
 
 @Component({
   selector: 'mf-select',
@@ -56,10 +65,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @ViewChild('searchInput')  private searchInput: ElementRef;
   @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
 
-  @Input() private searchTemplateLeft: TemplateRef<any>;
-  @Input() private searchTemplateRight: TemplateRef<any>;
-  @Input() private selectedTemplate: TemplateRef<any>;
-  @Input() private optionTemplate: TemplateRef<any>;
+  @Input() public searchTemplateLeft: TemplateRef<any>;
+  @Input() public searchTemplateRight: TemplateRef<any>;
+  @Input() public selectedTemplate: TemplateRef<any>;
+  @Input() public optionTemplate: TemplateRef<any>;
 
 
   public searchTerm: string = '';
@@ -88,8 +97,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private elementRef: ElementRef,
-    private renderer: Renderer2
+    private elementRef: ElementRef
   ) {
   }
 
@@ -279,7 +287,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const offsetTop = selectRect.top + window.pageYOffset;
     const height = selectRect.height;
-    const dropdownHeight = this.dropdownPanel.nativeElement.getBoundingClientRect().height;
+    const dropdownPanel = this.getDropdownMenu();
+    if (!dropdownPanel) { return; }
+    const dropdownHeight = dropdownPanel.getBoundingClientRect().height;
 
     if (offsetTop + height + dropdownHeight > scrollTop + document.documentElement.clientHeight) {
       this.currentDropdownPosition = 'top';
@@ -290,7 +300,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   private updateAppendedDropdownPosition(): void {
     const select: HTMLElement = this.elementRef.nativeElement;
-    const dropdownPanel: HTMLElement = this.dropdownPanel.nativeElement;
+    const dropdownPanel = this.getDropdownMenu();
+    if (!dropdownPanel) { return; }
     const parentRect = dropdownPanel.parentElement.getBoundingClientRect();
     const selectRect = select.getBoundingClientRect();
     const offsetTop = selectRect.top - parentRect.top;
@@ -302,14 +313,4 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     dropdownPanel.style.left = offsetLeft + 'px';
     dropdownPanel.style.width = selectRect.width + 'px';
   }
-}
-
-export enum KeyCode {
-  Tab = 9,
-  Enter = 13,
-  Esc = 27,
-  Space = 32,
-  ArrowUp = 38,
-  ArrowDown = 40,
-  Backspace = 8
 }
