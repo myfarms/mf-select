@@ -38,6 +38,14 @@
         border: 1px solid #ced4da;
         padding: 8px 15px;
         user-select: none;
+
+        .mf-select-selected-text {
+            margin-right: 34px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .mf-icons {
             position: absolute;
             top: 10px;

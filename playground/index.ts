@@ -31,6 +31,7 @@ class AppComponent {
     'Laura',
     'Henery',
     'Texel',
+    'Really long name to make sure wrapping doesnt break it. it looks really ugly when it does'
   ].sort();
 
   public objectItems: any[] = this.stringItems.map((item, idx) => {

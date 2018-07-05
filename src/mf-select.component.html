@@ -5,7 +5,7 @@
 <div>
   <div class='mf-select-selected' (click)='open()'>
     <span *ngIf='!model'>{{ placeholder }}</span>
-    <span *ngIf='model'>
+    <div class='mf-select-selected-text' *ngIf='model'>
       <ng-template #defaultSelectedTemplate>
         <span>{{ getLabel(model) }}</span>
       </ng-template>
@@ -13,7 +13,7 @@
         [ngTemplateOutlet]='selectedTemplate || defaultSelectedTemplate'
         [ngTemplateOutletContext]='{ select: this, selected: model }'
       ></ng-container>
-    </span>
+    </div>
     <span class='mf-icons'>
       <i class='mf-clear' *ngIf='model' (click)='selectItem(null); $event.stopPropagation()'></i>
       <i class='mf-caret'></i>
