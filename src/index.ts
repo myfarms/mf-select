@@ -4,10 +4,9 @@ import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { MfSelectComponent } from './mf-select.component';
 import { MfOptionHighlightDirective } from './mf-option-highlight.directive';
-import { MfSelectService } from './mf-select.service';
+// import { MfSelectService } from './mf-select.service';
 
 export * from './mf-select.component';
-export * from './mf-select.service';
 
 @NgModule({
   imports: [
@@ -24,10 +23,10 @@ export * from './mf-select.service';
   ]
 })
 export class MfSelectModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: MfSelectModule,
-      providers: [MfSelectService]
-    };
-  }
+  // static forRoot(): ModuleWithProviders {
+  //   return {
+  //     ngModule: MfSelectModule,
+  //     providers: [MfSelectService]
+  //   };
+  // }
 }

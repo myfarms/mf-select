@@ -1,57 +1,104 @@
 # @myfarms/mf-select
 
-## Installation
+## Getting started
 
-To install this library, run:
+### Step 1: Install `@myfarms/mf-select`
 
 ```bash
 $ npm install @myfarms/mf-select --save
 ```
 
-## Consuming your library
-
-Once you have published your library to npm, you can import your library in any Angular application by running:
-
-```bash
-$ npm install @myfarms/mf-select
-```
-
-and then from your Angular `AppModule`:
+### Step 2: Import the MfSelectModule
 
 ```typescript
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+
+import { MfSelectModule } from '@myfarms/mf-select';
 
 import { AppComponent } from './app.component';
 
-// Import your library
-import { SampleModule } from '@myfarms/mf-select';
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
-    BrowserModule,
-
-    // Specify your library as an import
-    LibraryModule
+    MfSelectModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
 ```
 
-Once your library is imported, you can use its components, directives and pipes in your Angular application:
+### Step3: Use the component in your template
 
 ```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<sampleComponent></sampleComponent>
+<mf-select
+  [items]='items'
+></mf-select>
 ```
+
+## API
+### Inputs
+
+| Input  | Type | Default | Description |
+| ------------- | ------------- | ------------- | ------------- |
+| items | `string[]` &#124; `object[]` | `[]` | Items array |
+| itemLabel  | `string` | `'name'` | Object property to use for label |
+| appendTo | `string` |  `null` | Append dropdown to body or any other element using css selector |
+| dropdownPosition | `'bottom'` &#124; `'top'` &#124; `'auto'` | `'auto'` | Set the dropdown position on open |
+| dropdownWidth | `number` | `-` | Static width of the dropdown in pixels |
+| placeholder | `string` | `'Select...'` | Placeholder text |
+| searchTemplateLeft | `TemplateRef<any>` | `-` | Template for content left of search |
+| searchTemplateRight | `TemplateRef<any>` | `-` | Template for content right of search |
+| selectedTemplate | `TemplateRef<any>` | `-` | Template for content of selected item |
+| optionTemplate | `TemplateRef<any>` | `-` | Template for content of each item in the dropdown |
+
+[//]: # (IDEAS)
+[//]: # (| groupBy | `string` \| `Function` | null | no | Allow to group items by key or function expression |)
+[//]: # (| notFoundText | `string` | `No items found` | no | Set custom text when filter returns empty result |)
+[//]: # (| searchFn | `(term: string, item: any) => boolean` | `null` | no | Allow to filter by custom search function |)
+[//]: # (| virtualScroll | `boolean` |  false | no | Enable virtual scroll for better performance when rendering a lot of data |)
+
+### Outputs
+
+| Output  | Description |
+| ------------- | ------------- |
+| (update)  | Fired on selected value change |
+
+### Methods and Properties
+
+| Name  | Description |
+| ------------- | ------------- |
+| selectedItem | The selected item |
+| toggle() | Opens/closes the select dropdown panel, whichever is appropriate |
+| open() | Opens the select dropdown panel |
+| close() | Closes the select dropdown panel |
+| selectItem(item) | Selects the passed item |
+
+### Other
+
+| Name  | Type | Description |
+| ------------- | ------------- | ------------- |
+| [mfOptionHighlight] | directive | Highlights search term in option. Accepts search term. Should be used on option element when customizing template |
+
+
+## Change Detection
+Ng-select component implements `OnPush` change detection which means the dirty checking checks for immutable
+data types. That means if you do object mutations like:
+
+```js
+this.items.push({id: 1, name: 'New item'})
+```
+
+Component will not detect a change. Instead you need to do:
+
+```js
+this.items = [...this.items, { id: 1, name: 'New item' }];
+```
+
+This will cause the component to detect the change and update. Some might have concerns that
+this is a pricey operation, however, it is much more performant than running `ngDoCheck` and
+constantly diffing the array.
 
 ## Development
 

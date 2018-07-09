@@ -56,7 +56,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
-  @Input() public enableAddAction: boolean = false;
   @Input() public placeholder: string = 'Select...';
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
@@ -73,7 +72,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public searchTerm: string = '';
   public filteredItems: MfSelectItem[] = [];
-  public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'bottom';
+  public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'auto';
 
   @HostBinding('class') public parentClass = 'mf-select';
   @HostBinding('class.open') public isOpen: boolean = false;
