@@ -1,5 +1,7 @@
 # @myfarms/mf-select
 
+Playground: <https://stackblitz.com/edit/mf-select>
+
 ## Getting started
 
 ### Step 1: Install `@myfarms/mf-select`
@@ -52,12 +54,6 @@ export class AppModule { }
 | searchTemplateRight | `TemplateRef<any>` | `-` | Template for content right of search |
 | selectedTemplate | `TemplateRef<any>` | `-` | Template for content of selected item |
 | optionTemplate | `TemplateRef<any>` | `-` | Template for content of each item in the dropdown |
-
-[//]: # (IDEAS)
-[//]: # (| groupBy | `string` \| `Function` | null | no | Allow to group items by key or function expression |)
-[//]: # (| notFoundText | `string` | `No items found` | no | Set custom text when filter returns empty result |)
-[//]: # (| searchFn | `(term: string, item: any) => boolean` | `null` | no | Allow to filter by custom search function |)
-[//]: # (| virtualScroll | `boolean` |  false | no | Enable virtual scroll for better performance when rendering a lot of data |)
 
 ### Outputs
 
