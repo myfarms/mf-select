@@ -26,7 +26,6 @@
 
       // other libraries
       rxjs: 'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
       'angular2-virtual-scroll': 'npm:angular2-virtual-scroll/dist/virtual-scroll.js',
       '@tweenjs/tween.js': 'npm:@tweenjs/tween.js/src/Tween.js',
       '@myfarms/mf-select': '../dist'
@@ -45,7 +44,12 @@
         }
       },
       rxjs: {
+        main: "index.js",
         defaultExtension: 'js'
+      },
+      "rxjs/operators": {
+        main: "index.js",
+        defaultExtension: 'js',
       },
       '@myfarms/mf-select': {
         main: 'mf-select.umd.js',
