@@ -53,7 +53,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @Input() public items: MfSelectItem[] = [];
   @Input() public itemLabel: string = 'name';
-  @Input() public dropdownPosition: 'bottom' | 'top' | 'auto';
+  @Input() public dropdownPosition: 'bottom' | 'top' | 'auto' = 'auto';
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
   @Input() public placeholder: string = 'Select...';
@@ -72,7 +72,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public searchTerm: string = '';
   public filteredItems: MfSelectItem[] = [];
-  public currentDropdownPosition: 'bottom' | 'top' | 'auto' = 'auto';
+  public currentDropdownPosition: 'bottom' | 'top' | 'auto';
 
   @HostBinding('class') public parentClass = 'mf-select';
   @HostBinding('class.open') public isOpen: boolean = false;
@@ -305,7 +305,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     const selectRect = select.getBoundingClientRect();
     const offsetTop = selectRect.top - parentRect.top;
     const offsetLeft = selectRect.left - parentRect.left;
-    const topDelta = this.currentDropdownPosition === 'bottom' ? selectRect.height : -(dropdownPanel.getBoundingClientRect().height + 6);
+    const topDelta = this.currentDropdownPosition === 'top' ? -(dropdownPanel.getBoundingClientRect().height + 6) : selectRect.height;
     // console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
     dropdownPanel.style.top = offsetTop + topDelta + 'px';
     dropdownPanel.style.bottom = 'auto';
