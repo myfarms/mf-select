@@ -11,7 +11,7 @@
       </ng-template>
       <ng-container
         [ngTemplateOutlet]='selectedTemplate || defaultSelectedTemplate'
-        [ngTemplateOutletContext]='{ select: this, selected: model }'
+        [ngTemplateOutletContext]='{ select: this, selected: model, item: model }'
       ></ng-container>
     </div>
     <span class='mf-icons'>
