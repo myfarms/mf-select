@@ -4,18 +4,18 @@
 
 <div>
   <div class='mf-select-selected' (click)='open()'>
-    <span *ngIf='!model'>{{ placeholder }}</span>
-    <div class='mf-select-selected-text' *ngIf='model'>
+    <span *ngIf='!selectedItem'>{{ placeholder }}</span>
+    <div class='mf-select-selected-text' *ngIf='selectedItem'>
       <ng-template #defaultSelectedTemplate>
-        <span>{{ getLabel(model) }}</span>
+        <span>{{ getLabel(selectedItem) }}</span>
       </ng-template>
       <ng-container
         [ngTemplateOutlet]='selectedTemplate || defaultSelectedTemplate'
-        [ngTemplateOutletContext]='{ select: this, selected: model, item: model }'
+        [ngTemplateOutletContext]='{ select: this, selected: selectedItem, item: selectedItem }'
       ></ng-container>
     </div>
     <span class='mf-icons'>
-      <i class='mf-clear' *ngIf='model' (click)='selectItem(null); $event.stopPropagation()'></i>
+      <i class='mf-clear' *ngIf='selectedItem' (click)='selectItem(null); $event.stopPropagation()'></i>
       <i class='mf-caret'></i>
     </span>
   </div>
@@ -53,10 +53,10 @@
       [items]='filteredItems'
       [scrollAnimationTime]='500'
       [childHeight]='28'
-      (update)='viewPortItems = $event'
+      #scroll
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
-        *ngFor='let item of viewPortItems;'
+        *ngFor='let item of scroll.viewPortItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
       >
         <ng-template #defaultOptionTemplate>
