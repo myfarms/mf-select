@@ -53,10 +53,10 @@
       [items]='filteredItems'
       [scrollAnimationTime]='500'
       [childHeight]='28'
-      #scroll
+      (update)='viewPortItems = $event'
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
-        *ngFor='let item of scroll.viewPortItems;'
+        *ngFor='let item of viewPortItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
       >
         <ng-template #defaultOptionTemplate>

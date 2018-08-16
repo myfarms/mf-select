@@ -73,6 +73,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public searchTerm: string = '';
   public filteredItems: MfSelectItem[] = [];
   public currentDropdownPosition: 'bottom' | 'top' | 'auto';
+  public viewPortItems: MfSelectItem[] = [];
 
   @HostBinding('class') public parentClass = 'mf-select';
   @HostBinding('class.open') public isOpen: boolean = false;
