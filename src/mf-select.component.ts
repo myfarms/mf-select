@@ -311,6 +311,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     dropdownPanel.style.top = offsetTop + topDelta + 'px';
     dropdownPanel.style.bottom = 'auto';
     dropdownPanel.style.left = offsetLeft + 'px';
-    dropdownPanel.style.width = selectRect.width + 'px';
+    if (!this.dropdownWidth) {
+      dropdownPanel.style.width = selectRect.width + 'px';
+    }
   }
 }

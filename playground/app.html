@@ -46,6 +46,11 @@ Model: {{ ngModelObject | json }}
   <mf-select [items]='objectItems' dropdownPosition='auto' appendTo='body'></mf-select>
 </div>
 
+<h2>Append To Body with dropdownWidth</h2>
+<div style='margin: 100px; width: 150px'>
+  <mf-select [items]='objectItems' dropdownPosition='auto' appendTo='body' [dropdownWidth]='500'></mf-select>
+</div>
+
 <h2>Append To Blue Box -></h2>
 <div style='margin: 100px; width: 500px'>
   <mf-select [items]='objectItems' dropdownPosition='auto' appendTo='#bs4-container'></mf-select>
