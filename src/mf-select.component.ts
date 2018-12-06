@@ -27,6 +27,10 @@ import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 export type MfSelectItem = string | object;
 
+export interface MfCategory {
+  categoryName: string;
+}
+
 export enum KeyCode {
   Tab = 9,
   Enter = 13,
@@ -53,6 +57,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @Input() public items: MfSelectItem[] = [];
   @Input() public itemLabel: string = 'name';
+  @Input() public categoryLabel?: string;
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto' = 'auto';
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
@@ -68,6 +73,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public searchTemplateRight: TemplateRef<any>;
   @Input() public selectedTemplate: TemplateRef<any>;
   @Input() public optionTemplate: TemplateRef<any>;
+  @Input() public optionCategoryTemplate: TemplateRef<any>;
+
 
 
   public searchTerm: string = '';
@@ -124,6 +131,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
     if (changes.items) {
       this.items = changes.items.currentValue;
+      this.processCategories(changes.items.currentValue);
 
       // Update filteredItems
       this.onSearch(this.searchTerm);
@@ -218,7 +226,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public selectItem(item: MfSelectItem): void {
-    if (this.isDisabled) { return; }
+    if (this.isDisabled || this.isMfCategory(item)) { return; }
     this.updateNgModel(item);
     this.markedItem = this.filteredItems.indexOf(this.model);
     this.onChange(this.model);
@@ -314,5 +322,33 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     if (!this.dropdownWidth) {
       dropdownPanel.style.width = selectRect.width + 'px';
     }
+  }
+
+  private processCategories(items: MfSelectItem[]) {
+    if (this.categoryLabel === undefined) { return; }
+
+    let categorySet: Set<string> = new Set([]);
+    for (const item of this.items) {
+      categorySet.add(item[this.categoryLabel]);
+    }
+
+    let categories = Array.from(categorySet.values()).sort();
+
+    let itemsWithCategories: MfSelectItem[] = [];
+    for (const category of categories) {
+      itemsWithCategories.push({ categoryName: category });
+
+      for (const item of this.items) {
+        if (item[this.categoryLabel] === category) {
+          itemsWithCategories.push(item);
+        }
+      }
+    }
+
+    this.items = itemsWithCategories;
+  }
+
+  private isMfCategory(item: MfSelectItem): item is MfCategory {
+    return (<MfCategory> item).categoryName !== undefined;
   }
 }

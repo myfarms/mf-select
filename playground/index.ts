@@ -22,7 +22,7 @@ class AppComponent {
   public stringItems: string[] = [
     'Kelly',
     'Adam',
-    'Jesse',
+    'Lily',
     'Anna',
     'Shorty',
     'Chris',
@@ -31,6 +31,7 @@ class AppComponent {
     'Laura',
     'Henery',
     'Texel',
+    'Simon',
     'Really long name to make sure wrapping doesnt break it. it looks really ugly when it does'
   ].sort();
 
@@ -38,6 +39,7 @@ class AppComponent {
     return {
       id: idx + 1,
       name: item,
+      category: idx % 2 === 0 ? 'Test' : 'Others',
     };
   });
 

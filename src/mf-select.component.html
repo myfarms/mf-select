@@ -59,11 +59,16 @@
         *ngFor='let item of viewPortItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
       >
+        <ng-template #defaultCategoryTemplate>
+          <div [innerHTML]='item.categoryName' [mfOptionHighlight]='searchTerm'></div>
+        </ng-template>
         <ng-template #defaultOptionTemplate>
           <div [innerHTML]='getLabel(item)' [mfOptionHighlight]='searchTerm'></div>
         </ng-template>
         <ng-container
-          [ngTemplateOutlet]='optionTemplate || defaultOptionTemplate'
+          [ngTemplateOutlet]='isMfCategory(item) ?
+                optionCategoryTemplate || defaultCategoryTemplate :
+		optionTemplate || defaultOptionTemplate'
           [ngTemplateOutletContext]='{ select: this, item: item }'
         ></ng-container>
       </div>
