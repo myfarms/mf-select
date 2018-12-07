@@ -335,14 +335,14 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   private processCategories(): MfSelectItem[] {
     if (this.categoryLabel === undefined) { return this.filteredItems; }
 
-    let categorySet: Set<string> = new Set([]);
+    const categorySet: Set<string> = new Set([]);
     for (const item of this.filteredItems) {
       categorySet.add(item[this.categoryLabel]);
     }
 
-    let categories = Array.from(categorySet.values()).sort();
+    const categories = Array.from(categorySet.values()).sort();
 
-    let itemsWithCategories: MfSelectItem[] = [];
+    const itemsWithCategories: MfSelectItem[] = [];
     for (const category of categories) {
       itemsWithCategories.push({ categoryName: category });
 
