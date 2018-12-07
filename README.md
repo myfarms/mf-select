@@ -46,6 +46,7 @@ export class AppModule { }
 | ------------- | ------------- | ------------- | ------------- |
 | items | `string[]` &#124; `object[]` | `[]` | Items array |
 | itemLabel  | `string` | `'name'` | Object property to use for label |
+| categoryLabel | string | 'category' | Grouping based on category, with category header rows |
 | appendTo | `string` |  `null` | Append dropdown to body or any other element using css selector |
 | dropdownPosition | `'bottom'` &#124; `'top'` &#124; `'auto'` | `'auto'` | Set the dropdown position on open |
 | dropdownWidth | `number` | `-` | Static width of the dropdown in pixels |
@@ -54,6 +55,7 @@ export class AppModule { }
 | searchTemplateRight | `TemplateRef<any>` | `-` | Template for content right of search |
 | selectedTemplate | `TemplateRef<any>` | `-` | Template for content of selected item |
 | optionTemplate | `TemplateRef<any>` | `-` | Template for content of each item in the dropdown |
+| optionCategoryTemplate | `TemplateRef<any>` | `-` | Template for content of each category header in the dropdown |
 
 ### Outputs
 

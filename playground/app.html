@@ -91,6 +91,23 @@ Model: {{ ngModelObject | json }}
   ></mf-select>
 </div>
 
+
+<h2>Categories With Templates</h2>
+<div style='margin: 100px; width: 500px'>
+  <ng-template #category let-item='item'>
+    <div style='font-weight: bold'>{{ item.categoryName }}</div>
+  </ng-template>
+  <ng-template #item let-item='item'>
+    <div style='margin-left: 15px'>{{ item.name }}</div>
+  </ng-template>
+  <mf-select
+    [items]='objectItems'
+    categoryLabel='category'
+    [optionTemplate]='item'
+    [optionCategoryTemplate]='category'
+  ></mf-select>
+</div>
+
 <div id='bs4-container'
   style='position:absolute; top: 2000px; left: 700px; width: 500px; height: 200px; background: rgba(0, 0, 255, 0.5);'
 ></div>

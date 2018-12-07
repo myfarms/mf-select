@@ -58,12 +58,18 @@
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
         *ngFor='let item of viewPortItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
+        [class.mf-category]='isMfCategory(item)'
       >
+        <ng-template #defaultCategoryTemplate>
+          <div [innerHTML]='item.categoryName' [mfOptionHighlight]='searchTerm'></div>
+        </ng-template>
         <ng-template #defaultOptionTemplate>
           <div [innerHTML]='getLabel(item)' [mfOptionHighlight]='searchTerm'></div>
         </ng-template>
         <ng-container
-          [ngTemplateOutlet]='optionTemplate || defaultOptionTemplate'
+          [ngTemplateOutlet]='isMfCategory(item) ?
+                optionCategoryTemplate || defaultCategoryTemplate :
+		optionTemplate || defaultOptionTemplate'
           [ngTemplateOutletContext]='{ select: this, item: item }'
         ></ng-container>
       </div>
