@@ -92,6 +92,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   private model: MfSelectItem = null;
   private _markedItem: number = 0;
   private set markedItem(val: number) {
+    val = this.findNextNonCategoryItem(val);
     this._markedItem = Math.max(val, 0);
   }
   private get markedItem(): number {
@@ -110,6 +111,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public ngOnInit(): void {
     this.filteredItems = this.items || [];
+    this.filteredItems = this.processCategories();
   }
 
   public ngAfterViewInit(): void {
@@ -131,10 +133,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
     if (changes.items) {
       this.items = changes.items.currentValue;
-      this.processCategories(changes.items.currentValue);
 
       // Update filteredItems
       this.onSearch(this.searchTerm);
+
+      if (this.isMfCategory(this.filteredItems[this.markedItem])) {
+        this.markedItem += 1;
+      }
     }
   }
 
@@ -157,7 +162,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           $event.preventDefault();
           break;
         case KeyCode.ArrowUp:
-          this.markedItem = this.markedItem > 0 ? this.markedItem - 1 : 0;
+          // Also skip over any categories when moving upward
+          this.markedItem += this.isMfCategory(this.filteredItems[this.markedItem - 1]) ? -2 : -1;
           this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
           $event.preventDefault();
           break;
@@ -213,8 +219,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.searchTerm = search;
     this.filteredItems = search ? this.items.filter((item: MfSelectItem) => {
       const value: string = this.getLabel(item);
-      return value.toUpperCase().indexOf(search.toUpperCase()) > -1;
+      return !this.isMfCategory(item) && value.toUpperCase().indexOf(search.toUpperCase()) > -1;
     }) : this.items || [];
+
+    this.filteredItems = this.processCategories();
 
     // If the marker would be outside the bounds, reset it.
     if (this.markedItem >= this.filteredItems.length) {
@@ -324,11 +332,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
-  private processCategories(items: MfSelectItem[]) {
-    if (this.categoryLabel === undefined) { return; }
+  private processCategories(): MfSelectItem[] {
+    if (this.categoryLabel === undefined) { return this.filteredItems; }
 
     let categorySet: Set<string> = new Set([]);
-    for (const item of this.items) {
+    for (const item of this.filteredItems) {
       categorySet.add(item[this.categoryLabel]);
     }
 
@@ -338,17 +346,33 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     for (const category of categories) {
       itemsWithCategories.push({ categoryName: category });
 
-      for (const item of this.items) {
+      for (const item of this.filteredItems) {
         if (item[this.categoryLabel] === category) {
           itemsWithCategories.push(item);
         }
       }
     }
 
-    this.items = itemsWithCategories;
+    return itemsWithCategories;
   }
 
   private isMfCategory(item: MfSelectItem): item is MfCategory {
-    return (<MfCategory> item).categoryName !== undefined;
+    return item && (<MfCategory> item).categoryName !== undefined;
+  }
+
+  private findNextNonCategoryItem(pos: number): number {
+    pos = pos >= 0 ? pos : 0;
+
+    while (this.isMfCategory(this.filteredItems[pos])) {
+      pos += 1;
+
+      // Off the edge of the map, here be.. Nevermind lets just turn around.
+      // Should be non-reachable
+      if (pos > this.filteredItems.length) {
+        return 0;
+      }
+    }
+
+    return pos;
   }
 }

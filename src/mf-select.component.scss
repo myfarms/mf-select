@@ -153,7 +153,7 @@
                 color: white;
             }
 
-            &:hover:not(.mf-marked) {
+            &:hover:not(.mf-marked):not(.mf-category) {
                 background-color: hsla(0, 0%, 0%, 0.15);
             }
 
