@@ -7,7 +7,6 @@ var gulp = require('gulp'),
   fs = require('fs-extra'),
   runSequence = require('run-sequence'),
   inlineResources = require('./tools/gulp/inline-resources');
-  ngFsUtils = require('@angular/compiler-cli/src/ngtsc/file_system');
   require('@angular/compiler-cli');
 const rootFolder = path.join(__dirname);
 const srcFolder = path.join(rootFolder, 'src');
