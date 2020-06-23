@@ -21,11 +21,11 @@
   "jsnext:main": "mf-select.js",
   "typings": "mf-select.d.ts",
   "peerDependencies": {
-    "@angular/core": "^6.0.0",
+    "@angular/core": "^9.0.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.4"
   },
   "dependencies": {
-    "angular2-virtual-scroll": "^0.3.2"
+    "angular2-virtual-scroll": "^0.4"
   }
 }
