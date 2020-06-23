@@ -65,9 +65,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
-  @ViewChild('dropdownPanel') private dropdownPanel: ElementRef;
-  @ViewChild('searchInput')  private searchInput: ElementRef;
-  @ViewChild(VirtualScrollComponent) private virtualScrollComponent: VirtualScrollComponent;
+  @ViewChild('dropdownPanel', {static: false}) private dropdownPanel: ElementRef;
+  @ViewChild('searchInput', {static: false})  private searchInput: ElementRef;
+  @ViewChild(VirtualScrollComponent, {static: false}) private virtualScrollComponent: VirtualScrollComponent;
 
   @Input() public searchTemplateLeft: TemplateRef<any>;
   @Input() public searchTemplateRight: TemplateRef<any>;
@@ -229,8 +229,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       this.markedItem = 0;
     }
 
-    // Refresh virtual scroll to reflect filtered items
-    this.virtualScrollComponent.refresh();
   }
 
   public selectItem(item: MfSelectItem): void {
