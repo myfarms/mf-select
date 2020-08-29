@@ -38,6 +38,10 @@
         padding: 6px 15px;
         user-select: none;
 
+        .mf-select-selected-placeholder {
+            margin-right: 19px;
+        }
+
         .mf-select-selected-text {
             margin-right: 34px;
             white-space: nowrap;
