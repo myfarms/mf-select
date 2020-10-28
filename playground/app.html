@@ -108,6 +108,13 @@ Model: {{ ngModelObject | json }}
   ></mf-select>
 </div>
 
+<h2>Tab Focus</h2>
+<div style='margin: 100px; width: 500px'>
+  <input/>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems'></mf-select>
+  <input/>
+</div>
+
 <div id='bs4-container'
   style='position:absolute; top: 2000px; left: 700px; width: 500px; height: 200px; background: rgba(0, 0, 255, 0.5);'
 ></div>

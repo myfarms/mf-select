@@ -21,6 +21,7 @@ import {
   SimpleChanges,
   TemplateRef,
   HostBinding,
+  HostListener,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
@@ -85,6 +86,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @HostBinding('class') public parentClass = 'mf-select';
   @HostBinding('class.open') public isOpen: boolean = false;
   @HostBinding('class.disabled') public isDisabled: boolean = false;
+  @HostBinding('tabindex') public tabindex = 0;
+
+  public isFocused: boolean = false;
 
   public get selectedItem() {
     return this.model;
@@ -98,7 +102,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   private get markedItem(): number {
     return this._markedItem;
   }
-
 
   private onChange = (_: MfSelectItem) => { };
   private onTouched = () => { };
@@ -118,7 +121,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     if (this.appendTo) {
       const parent = document.querySelector(this.appendTo);
       if (!parent) {
-        throw new Error(`appendTo selector ${this.appendTo} did not found any parent element`)
+        throw new Error(`appendTo selector ${this.appendTo} did not find any parent element`)
       }
       parent.appendChild(this.dropdownPanel.nativeElement);
       // this._handleDocumentResize();
@@ -150,37 +153,58 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
   }
 
+  // @HostListener('focus')
+  // public focusHandler() {
+  //   this.isFocused = true;
+  // }
+
+  // @HostListener('blur')
+  // public blurHandler() {
+  //   this.isFocused = false;
+  // }
+
+  @HostListener('keydown', ['$event'])
+  public onRootKeydown($event: KeyboardEvent): void {
+    switch ($event.code) {
+      case 'Space':
+      case 'Enter':
+        this.open();
+        $event.preventDefault();
+        break;
+    }
+  }
+
   // Only works when search input is focused
   public onKeydown($event: KeyboardEvent): void {
-    // console.log('handleKeyDown', $event.which);
-    if (KeyCode[$event.which]) {
-      switch ($event.which) {
-        case KeyCode.ArrowDown:
-          this.open();
-          this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
-          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
-          $event.preventDefault();
-          break;
-        case KeyCode.ArrowUp:
-          // Also skip over any categories when moving upward
-          this.markedItem += this.isMfCategory(this.filteredItems[this.markedItem - 1]) ? -2 : -1;
-          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
-          $event.preventDefault();
-          break;
-        case KeyCode.Space:
-          // this._handleSpace($event);
-          break;
-        case KeyCode.Enter:
-          this.selectItem(this.filteredItems[this.markedItem]);
-          break;
-        case KeyCode.Tab:
-          // this._handleTab($event);
-          break;
-        case KeyCode.Backspace:
-          // console.log('backspace');
-          // this._handleBackspace();
-          break;
-      }
+    switch ($event.code) {
+      case 'ArrowDown':
+        this.open();
+        this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
+        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        $event.preventDefault();
+        break;
+      case 'ArrowUp':
+        // Also skip over any categories when moving upward
+        this.markedItem += this.isMfCategory(this.filteredItems[this.markedItem - 1]) ? -2 : -1;
+        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        $event.preventDefault();
+        break;
+      case 'Space':
+        // this._handleSpace($event);
+        break;
+      case 'Enter':
+        this.selectItem(this.filteredItems[this.markedItem]);
+        break;
+      case 'Tab':
+        this.close();
+        break;
+      case 'Backspace':
+        // console.log('backspace');
+        // this._handleBackspace();
+        break;
+      case 'Escape':
+        this.close();
+        break;
     }
   }
 

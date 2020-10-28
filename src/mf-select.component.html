@@ -2,7 +2,7 @@
   <div class='mf-overlay' (click)='close()'></div>
 </div>
 
-<div>
+<div [class.mf-select-focus]='isFocused'>
   <div class='mf-select-selected' (click)='open()'>
     <span class='mf-select-selected-placeholder' *ngIf='!selectedItem'>{{ placeholder }}</span>
     <div class='mf-select-selected-text' *ngIf='selectedItem'>
@@ -37,7 +37,7 @@
         placeholder='Search...'
         (input)='onSearch(searchInput.value); $event.stopPropagation()'
         (change)='$event.stopPropagation()'
-        (keydown)='onKeydown($event)'
+        (keydown)='onKeydown($event); $event.stopPropagation()'
       />
       <!-- To make this better we could make the search input a separate component/directive in order to "get" it in this component. -->
       <div [style.margin-left]='searchTemplateRight ? "10px" : ""'>
