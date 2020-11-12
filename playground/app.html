@@ -115,6 +115,11 @@ Model: {{ ngModelObject | json }}
   <input/>
 </div>
 
+<h2>Disallow Clearing</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems' [allowClear]='false'></mf-select>
+</div>
+
 <div id='bs4-container'
   style='position:absolute; top: 2000px; left: 700px; width: 500px; height: 200px; background: rgba(0, 0, 255, 0.5);'
 ></div>

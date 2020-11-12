@@ -15,7 +15,7 @@
       ></ng-container>
     </div>
     <span class='mf-icons'>
-      <i class='mf-clear' *ngIf='selectedItem && !isDisabled' (click)='selectItem(null); $event.stopPropagation()'></i>
+      <i class='mf-clear' *ngIf='selectedItem && !isDisabled && allowClear' (click)='this.clear(); $event.stopPropagation()'></i>
       <i class='mf-caret'></i>
     </span>
   </div>

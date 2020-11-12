@@ -63,6 +63,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
   @Input() public placeholder: string = 'Select...';
+  @Input() public allowClear: boolean = true;
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
@@ -171,6 +172,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         this.open();
         $event.preventDefault();
         break;
+      case 'Backspace':
+        if (this.allowClear) {
+          this.clear();
+        }
+        break;
     }
   }
 
@@ -197,10 +203,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         break;
       case 'Tab':
         this.close();
-        break;
-      case 'Backspace':
-        // console.log('backspace');
-        // this._handleBackspace();
         break;
       case 'Escape':
         this.close();
@@ -237,6 +239,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
 
     this.isOpen = false;
+  }
+
+  public clear(): void {
+    this.selectItem(null);
   }
 
   public onSearch(search: string): void {
