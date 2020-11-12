@@ -200,6 +200,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         break;
       case 'Enter':
         this.selectItem(this.filteredItems[this.markedItem]);
+        this.elementRef.nativeElement.focus();
         break;
       case 'Tab':
         this.close();
