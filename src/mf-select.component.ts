@@ -170,14 +170,23 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       case 'Space':
       case 'Enter':
         this.open();
-        $event.preventDefault();
         break;
       case 'Backspace':
         if (this.allowClear) {
           this.clear();
         }
         break;
+      default:
+        // The key pressed is likely intended to be used as a search term
+        if ($event.key.length === 1) {
+          this.open();
+          this.searchInput.nativeElement.value = $event.key;
+          this.onSearch($event.key);
+        }
+        break;
     }
+
+    $event.preventDefault();
   }
 
   // Only works when search input is focused
@@ -199,14 +208,17 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         // this._handleSpace($event);
         break;
       case 'Enter':
-        this.selectItem(this.filteredItems[this.markedItem]);
+        const item = this.filteredItems[this.markedItem];
+        if (!item) {
+          return;
+        }
+        this.selectItem(item);
         this.elementRef.nativeElement.focus();
         break;
       case 'Tab':
-        this.close();
-        break;
       case 'Escape':
         this.close();
+        this.elementRef.nativeElement.focus();
         break;
     }
   }
@@ -220,10 +232,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
     this.isOpen = true;
 
-    // Focus search and select all text
+    // Focus search
     setTimeout(() => {
       this.searchInput.nativeElement.focus();
-      this.searchInput.nativeElement.select();
     });
 
     if (this.dropdownPosition === 'auto') {
