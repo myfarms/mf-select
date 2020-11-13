@@ -170,11 +170,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       case 'Space':
       case 'Enter':
         this.open();
+        $event.preventDefault();
         break;
       case 'Backspace':
         if (this.allowClear) {
           this.clear();
         }
+        $event.preventDefault();
         break;
       default:
         // The key pressed is likely intended to be used as a search term
@@ -182,11 +184,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           this.open();
           this.searchInput.nativeElement.value = $event.key;
           this.onSearch($event.key);
+          $event.preventDefault();
         }
         break;
     }
-
-    $event.preventDefault();
   }
 
   // Only works when search input is focused
