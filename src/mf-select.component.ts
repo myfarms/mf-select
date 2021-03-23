@@ -180,7 +180,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         break;
       default:
         // The key pressed is likely intended to be used as a search term
-        if ($event.key.length === 1) {
+        if ($event.ctrlKey === false && $event.altKey === false && $event.metaKey === false && $event.key.length === 1) {
           this.open();
           this.searchInput.nativeElement.value = $event.key;
           this.onSearch($event.key);
@@ -276,9 +276,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public selectItem(item: MfSelectItem): void {
     if (this.isDisabled || this.isMfCategory(item)) { return; }
-    this.updateNgModel(item);
+    this.model = item;
     this.markedItem = this.filteredItems.indexOf(this.model);
     this.onChange(this.model);
+    this.update.emit(this.model);
     this.close();
   }
 
@@ -299,12 +300,14 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
    * ControlValueAccessor Methods
    */
   public writeValue(value: MfSelectItem): void {
-    this.updateNgModel(value);
+    this.model = value;
     this.markedItem = this.filteredItems.indexOf(this.model);
 
     if (!(<any>this.changeDetectorRef).destroyed) {
       this.changeDetectorRef.detectChanges();
     }
+
+    this.update.emit(value);
   }
 
   public registerOnChange(fn: any): void {
@@ -317,12 +320,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
-  }
-
-
-  private updateNgModel(value: MfSelectItem): void {
-    this.model = value;
-    this.update.emit(this.model);
   }
 
 
