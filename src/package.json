@@ -6,9 +6,23 @@
     "url": "https://github.com/myfarms/mf-select"
   },
   "author": {
-    "name": "Adam Keenan",
-    "email": "adam.keenan@myfarms.com"
+    "name": "MyFarms",
+    "email": "administrator@myfarms.com"
   },
+  "contributors": [
+    {
+      "name": "Adam Keenan",
+      "email": "adam.g.keenan@gmail.com"
+    },
+    {
+      "name": "Simon Smith",
+      "email": "simon.smith@myfarms.com"
+    },
+    {
+      "name": "Dylan Hamilton",
+      "email": "dylan.hamilton@myfarms.com"
+    }
+  ],
   "keywords": [
     "angular"
   ],

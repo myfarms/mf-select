@@ -114,4 +114,4 @@ $ npm run lint
 
 ## License
 
-MIT © [Adam Keenan](mailto:adam.keenan@myfarms.com)
+MIT © [MyFarms](mailto:administrator@myfarms.com)
