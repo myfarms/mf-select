@@ -4,8 +4,9 @@
 
 <div [class.mf-select-focus]='isFocused'>
   <div class='mf-select-selected' (click)='open()'>
-    <span class='mf-select-selected-placeholder' *ngIf='!selectedItem'>{{ placeholder }}</span>
-    <div class='mf-select-selected-text' *ngIf='selectedItem'>
+    <span class='mf-select-selected-placeholder' *ngIf='!selectedItem && !loading && !observableLoading'>{{ placeholder }}</span>
+    <span class='mf-select-selected-placeholder' *ngIf='loading || observableLoading'>{{ placeholderLoading }}</span>
+    <div class='mf-select-selected-text' *ngIf='selectedItem && !loading && !observableLoading'>
       <ng-template #defaultSelectedTemplate>
         <span>{{ getLabel(selectedItem) }}</span>
       </ng-template>
@@ -14,10 +15,11 @@
         [ngTemplateOutletContext]='{ select: this, selected: selectedItem, item: selectedItem }'
       ></ng-container>
     </div>
-    <span class='mf-icons'>
+    <span class='mf-icons' *ngIf='!loading && !observableLoading; else spinner'>
       <i class='mf-clear' *ngIf='selectedItem && !isDisabled && allowClear' (click)='this.clear(); $event.stopPropagation()'></i>
       <i class='mf-caret'></i>
     </span>
+    <ng-template #spinner><span class='mf-spinner'><i></i></span></ng-template>
   </div>
   <div class='mf-select-dropdown' #dropdownPanel
     [class.top]='currentDropdownPosition === "top"'

@@ -23,6 +23,7 @@ import {
   HostBinding,
   HostListener,
 } from '@angular/core';
+import { Observable, isObservable } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
@@ -56,14 +57,16 @@ export enum KeyCode {
 })
 export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
 
-  @Input() public items: MfSelectItem[] = [];
+  @Input() public items: MfSelectItem[] | Observable<MfSelectItem[]>;
   @Input() public itemLabel: string = 'name';
   @Input() public categoryLabel?: string;
   @Input() public dropdownPosition: 'bottom' | 'top' | 'auto' = 'auto';
   @Input() public dropdownWidth: number;
   @Input() public appendTo: string;
   @Input() public placeholder: string = 'Select...';
+  @Input() public placeholderLoading: string = 'Loading...';
   @Input() public allowClear: boolean = true;
+  @Input() public loading: boolean = false;
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
@@ -94,6 +97,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public get selectedItem() {
     return this.model;
   }
+
+  private _items: MfSelectItem[] = [];
+
+  private observableLoading: boolean = false;
   private model: MfSelectItem = null;
   private _markedItem: number = 0;
   private set markedItem(val: number) {
@@ -110,11 +117,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private elementRef: ElementRef
-  ) {
-  }
+  ) {}
 
   public ngOnInit(): void {
-    this.filteredItems = this.items || [];
+    this.filteredItems = this._items || [];
     this.filteredItems = this.processCategories();
   }
 
@@ -136,13 +142,33 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
 
     if (changes.items) {
-      this.items = changes.items.currentValue;
+      if (isObservable(changes.items.currentValue)) {
+        this.observableLoading = true;
 
-      // Update filteredItems
-      this.onSearch(this.searchTerm);
+        changes.items.currentValue.subscribe((items: MfSelectItem[]) => {
+          this.observableLoading = false;
+          this._items = items;
 
-      if (this.isMfCategory(this.filteredItems[this.markedItem])) {
-        this.markedItem += 1;
+          // Update filteredItems
+          this.onSearch(this.searchTerm);
+
+          if (this.isMfCategory(this.filteredItems[this.markedItem])) {
+            this.markedItem += 1;
+          }
+
+          if (!(<any>this.changeDetectorRef).destroyed) {
+            this.changeDetectorRef.detectChanges();
+          }
+        });
+      } else {
+        this._items = changes.items.currentValue;
+
+        // Update filteredItems
+        this.onSearch(this.searchTerm);
+
+        if (this.isMfCategory(this.filteredItems[this.markedItem])) {
+          this.markedItem += 1;
+        }
       }
     }
   }
@@ -229,7 +255,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   public open(): void {
-    if (this.isDisabled || this.isOpen) { return; }
+    if (this.isDisabled || this.isOpen || this.loading || this.observableLoading) { return; }
 
     this.isOpen = true;
 
@@ -260,10 +286,10 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public onSearch(search: string): void {
     this.searchTerm = search;
-    this.filteredItems = search ? this.items.filter((item: MfSelectItem) => {
+    this.filteredItems = search ? this._items.filter((item: MfSelectItem) => {
       const value: string = this.getLabel(item);
       return !this.isMfCategory(item) && value.toUpperCase().indexOf(search.toUpperCase()) > -1;
-    }) : this.items || [];
+    }) : this._items || [];
 
     this.filteredItems = this.processCategories();
 
