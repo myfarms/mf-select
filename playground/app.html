@@ -120,6 +120,18 @@ Model: {{ ngModelObject | json }}
   <mf-select [(ngModel)]='ngModel' [items]='stringItems' [allowClear]='false'></mf-select>
 </div>
 
+<h2>Loading Flag</h2>
+<button (click)='toggleLoadingFlag()'>Toggle Loading Flag</button>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems' [allowClear]='false' [loading]='loadingFlag'></mf-select>
+</div>
+
+<h2>Passing a subscription to items</h2>
+<button (click)='setObservable()'>Restart 3 second Subscription</button>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='itemsObserveable' [allowClear]='false'></mf-select>
+</div>
+
 <div id='bs4-container'
   style='position:absolute; top: 2000px; left: 700px; width: 500px; height: 200px; background: rgba(0, 0, 255, 0.5);'
 ></div>

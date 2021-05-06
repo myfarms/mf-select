@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Component } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule } from '@angular/forms';
+import { Observable, timer } from 'rxjs';
+import { take, mergeMap } from 'rxjs/operators';
 
 import { MfSelectModule }  from '../dist';
 
@@ -49,6 +51,7 @@ class AppComponent {
     for (let i = 1; i <= 10000; i++) {
       this.tenThousandItems.push(i + '');
     }
+    this.setObservable()
   }
 
   public addItem(search: string) {
@@ -63,6 +66,16 @@ class AppComponent {
     ];
 
     this.ngModel = this.stringItems[1];
+  }
+
+  public loadingFlag: boolean = true;
+  public toggleLoadingFlag() {
+    this.loadingFlag = !this.loadingFlag;
+  }
+
+  public itemsObserveable: Observable<string[]>;
+  public setObservable() {
+    this.itemsObserveable = timer(3000).pipe(take(1), mergeMap(() => [this.stringItems]));
   }
 
   public changeModel() {
