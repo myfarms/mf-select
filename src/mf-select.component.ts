@@ -67,6 +67,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public placeholderLoading: string = 'Loading...';
   @Input() public allowClear: boolean = true;
   @Input() public loading: boolean = false;
+  @Input() public floatingLabel: string | undefined;
+  @Input() public backgroundColor: string = 'white';
+  @Input() public floatingLabelColor: string = 'white';
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 

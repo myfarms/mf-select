@@ -3,9 +3,16 @@
 </div>
 
 <div [class.mf-select-focus]='isFocused'>
-  <div class='mf-select-selected' (click)='open()'>
+  <div class='mf-select-selected' (click)='open()' [ngStyle]='{ "background-color": backgroundColor }'>
     <span class='mf-select-selected-placeholder' *ngIf='!selectedItem && !loading && !observableLoading'>{{ placeholder }}</span>
     <span class='mf-select-selected-placeholder' *ngIf='loading || observableLoading'>{{ placeholderLoading }}</span>
+    <span
+        class='mf-select-floating-label'
+        *ngIf='floatingLabel && selectedItem && !loading && !observableLoading'
+        [ngStyle]='{ "background-color": floatingLabelColor }'
+    >
+        {{ floatingLabel }}
+    </span>
     <div class='mf-select-selected-text' *ngIf='selectedItem && !loading && !observableLoading'>
       <ng-template #defaultSelectedTemplate>
         <span>{{ getLabel(selectedItem) }}</span>
@@ -24,7 +31,7 @@
   <div class='mf-select-dropdown' #dropdownPanel
     [class.top]='currentDropdownPosition === "top"'
     [class.bottom]='currentDropdownPosition === "bottom"'
-    [ngStyle]='{ visibility: isOpen ? "visible": "hidden"}'
+    [ngStyle]='{ visibility: isOpen ? "visible": "hidden", "background-color": backgroundColor }'
     [style.width]='dropdownWidth + "px"'
   >
     <div class='mf-search-container'>

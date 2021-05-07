@@ -37,7 +37,6 @@
 
     .mf-select-selected {
         line-height: 1.5;
-        background: #ffffff;
         border-radius: 5px;
         border: 1px solid #ced4da;
         padding: 6px 15px;
@@ -108,6 +107,14 @@
             }
         }
 
+        .mf-select-floating-label {
+            position: absolute;
+            z-index: 3;
+            padding: 0 0.3rem;
+            left: 0.7rem;
+            top: -0.45rem;
+            font-size: 11px;
+        }
     }
 
     &.open .mf-select-selected {
@@ -139,7 +146,6 @@
 .mf-select-dropdown {
     font-size: 16px;
     line-height: 24px;
-    background: #ffffff;
     border-radius: 5px;
     border: 1px solid #00a126;
     padding: 10px 5px;
