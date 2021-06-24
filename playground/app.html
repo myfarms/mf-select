@@ -91,7 +91,6 @@ Model: {{ ngModelObject | json }}
   ></mf-select>
 </div>
 
-
 <h2>Categories With Templates</h2>
 <div style='margin: 100px; width: 500px'>
   <ng-template #category let-item='item'>
@@ -118,6 +117,33 @@ Model: {{ ngModelObject | json }}
 <h2>Disallow Clearing</h2>
 <div style='margin: 100px; width: 500px'>
   <mf-select [(ngModel)]='ngModel' [items]='stringItems' [allowClear]='false'></mf-select>
+</div>
+
+<h2>Loading Flag</h2>
+<button (click)='toggleLoadingFlag()'>Toggle Loading Flag</button>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='stringItems' [allowClear]='false' [loading]='loadingFlag'></mf-select>
+</div>
+
+<h2>Passing a subscription to items</h2>
+<button (click)='setObservable()'>Restart 3 second Subscription</button>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [(ngModel)]='ngModel' [items]='itemsObserveable' [allowClear]='false'></mf-select>
+</div>
+
+<h2>Floating Label</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' floatingLabel='Floating Label'></mf-select>
+</div>
+
+<h2>Floating Label Color</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' floatingLabel='Floating Label' floatingLabelColor='red'></mf-select>
+</div>
+
+<h2>Background Color</h2>
+<div style='margin: 100px; width: 500px'>
+  <mf-select [items]='objectItems' floatingLabel='Floating Label' backgroundColor='red'></mf-select>
 </div>
 
 <div id='bs4-container'

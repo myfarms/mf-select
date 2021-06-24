@@ -44,13 +44,19 @@ export class AppModule { }
 
 | Input  | Type | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
-| items | `string[]` &#124; `object[]` | `[]` | Items array |
+| items | `string[]` &#124; `object[] `&#124; `Observable<string[] \| object[]>` | `[]` | Items array or Observable results in an array |
 | itemLabel  | `string` | `'name'` | Object property to use for label |
-| categoryLabel | string | 'category' | Grouping based on category, with category header rows |
+| categoryLabel | `string` | `'category'` | Grouping based on category, with category header rows |
 | appendTo | `string` |  `null` | Append dropdown to body or any other element using css selector |
 | dropdownPosition | `'bottom'` &#124; `'top'` &#124; `'auto'` | `'auto'` | Set the dropdown position on open |
 | dropdownWidth | `number` | `-` | Static width of the dropdown in pixels |
 | placeholder | `string` | `'Select...'` | Placeholder text |
+| placeholderLoading | `string` | `'Loading...'` | Placeholder text while loading |
+| allowClear | `boolean` | `true` | Allow dropdown selection to be cleared via 'X' button |
+| loading | `boolean` |  `false` | Flag for manually setting loading spinner |
+| floatingLabel | `string` &#124; `undefined` | `undefined` | Floating label that shows when item is selected |
+| backgroundColor | `string` | `'white'` | Background color for the select box and dropdown |
+| floatingLabelColor | `string` | `'white'` | Background color for the floating label |
 | searchTemplateLeft | `TemplateRef<any>` | `-` | Template for content left of search |
 | searchTemplateRight | `TemplateRef<any>` | `-` | Template for content right of search |
 | selectedTemplate | `TemplateRef<any>` | `-` | Template for content of selected item |
