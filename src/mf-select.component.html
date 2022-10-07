@@ -61,7 +61,7 @@
       [bufferAmount]='4'
       [items]='filteredItems'
       [scrollAnimationTime]='500'
-      [childHeight]='28'
+      [childHeight]='optionRowHeight'
       (update)='viewPortItems = $event'
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'

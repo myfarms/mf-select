@@ -53,6 +53,7 @@ export class AppModule { }
 | placeholder | `string` | `'Select...'` | Placeholder text |
 | placeholderLoading | `string` | `'Loading...'` | Placeholder text while loading |
 | allowClear | `boolean` | `true` | Allow dropdown selection to be cleared via 'X' button |
+| optionRowHeight | `number` | `28` | Allow a custom row height to be set, which matters mostly when the search filter is used |
 | loading | `boolean` |  `false` | Flag for manually setting loading spinner |
 | floatingLabel | `string` &#124; `undefined` | `undefined` | Floating label that shows when item is selected |
 | backgroundColor | `string` | `'white'` | Background color for the select box and dropdown |

@@ -70,6 +70,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public floatingLabel: string | undefined;
   @Input() public backgroundColor: string = 'white';
   @Input() public floatingLabelColor: string = 'white';
+  @Input() public optionRowHeight: number = 28;
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
