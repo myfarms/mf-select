@@ -68,6 +68,7 @@
         *ngFor='let item of viewPortItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
         [class.mf-category]='isMfCategory(item)'
+        [class.mf-disabled-option]='disableOptionsByKey && item[disableOptionsByKey]'
       >
         <ng-template #defaultCategoryTemplate>
           <div [innerHTML]='item.categoryName' [mfOptionHighlight]='searchTerm'></div>
