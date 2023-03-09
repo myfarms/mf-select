@@ -71,6 +71,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   @Input() public backgroundColor: string = 'white';
   @Input() public floatingLabelColor: string = 'white';
   @Input() public optionRowHeight: number = 28;
+  @Input() public disableOptionsByKey: string;
 
   @Output() public update: EventEmitter<MfSelectItem> = new EventEmitter<MfSelectItem>();
 
@@ -126,6 +127,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public ngOnInit(): void {
     this.filteredItems = this._items || [];
     this.filteredItems = this.processCategories();
+
+    this.markedItem = this.findNextNonCategoryItem(0);
   }
 
   public ngAfterViewInit(): void {
@@ -156,9 +159,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           // Update filteredItems
           this.onSearch(this.searchTerm);
 
-          if (this.isMfCategory(this.filteredItems[this.markedItem])) {
-            this.markedItem += 1;
-          }
+          this.markedItem = this.findNextNonCategoryItem(this.markedItem || 0);
 
           if (!(<any>this.changeDetectorRef).destroyed) {
             this.changeDetectorRef.detectChanges();
@@ -170,9 +171,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         // Update filteredItems
         this.onSearch(this.searchTerm);
 
-        if (this.isMfCategory(this.filteredItems[this.markedItem])) {
-          this.markedItem += 1;
-        }
+        this.markedItem = this.findNextNonCategoryItem(this.markedItem || 0);
       }
     }
   }
@@ -225,20 +224,27 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     switch ($event.code) {
       case 'ArrowDown':
         this.open();
-        this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
-        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        this.markedItem = this.findNextNonCategoryItem(this.markedItem !== undefined ? this.markedItem + 1 : 0);
+        if (this.markedItem !== undefined) {
+          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        }
         $event.preventDefault();
         break;
       case 'ArrowUp':
         // Also skip over any categories when moving upward
-        this.markedItem += this.isMfCategory(this.filteredItems[this.markedItem - 1]) ? -2 : -1;
-        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+          this.markedItem = this.findPreviousNonCategoryItem(this.markedItem !== undefined ? this.markedItem - 1 : 0);
+        if (this.markedItem !== undefined) {
+          this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        }
         $event.preventDefault();
         break;
       case 'Space':
         // this._handleSpace($event);
         break;
       case 'Enter':
+        if (this.markedItem === undefined) {
+          return;
+        }
         const item = this.filteredItems[this.markedItem];
         if (!item) {
           return;
@@ -297,15 +303,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
     this.filteredItems = this.processCategories();
 
-    // If the marker would be outside the bounds, reset it.
-    if (this.markedItem >= this.filteredItems.length) {
-      this.markedItem = 0;
-    }
-
+    this.markedItem = this.findNextNonCategoryItem(0);
   }
 
   public selectItem(item: MfSelectItem): void {
-    if (this.isDisabled || this.isMfCategory(item)) { return; }
+    if (this.isDisabled || this.isMfCategory(item) || this.isDisabledItem(item)) { return; }
     this.model = item;
     this.markedItem = this.filteredItems.indexOf(this.model);
     this.onChange(this.model);
@@ -391,7 +393,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     const offsetTop = selectRect.top - parentRect.top;
     const offsetLeft = selectRect.left - parentRect.left;
     const topDelta = this.currentDropdownPosition === 'top' ? -(dropdownPanel.getBoundingClientRect().height + 6) : selectRect.height;
-    // console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
     dropdownPanel.style.top = offsetTop + topDelta + 'px';
     dropdownPanel.style.bottom = 'auto';
     dropdownPanel.style.left = offsetLeft + 'px';
@@ -428,19 +429,38 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     return item && (<MfCategory> item).categoryName !== undefined;
   }
 
-  private findNextNonCategoryItem(pos: number): number {
-    pos = pos >= 0 ? pos : 0;
+  private isDisabledItem(item: MfSelectItem): boolean {
+    return item && typeof(item) === 'object' && this.disableOptionsByKey && item[this.disableOptionsByKey];
+  }
 
-    while (this.isMfCategory(this.filteredItems[pos])) {
-      pos += 1;
+  private findPreviousNonCategoryItem(pos: number): number | undefined {
+    // Make sure the position is between 0 and the length of the list
+    pos = Math.max(0, Math.min(this.filteredItems.length - 1, pos));
 
-      // Off the edge of the map, here be.. Nevermind lets just turn around.
-      // Should be non-reachable
-      if (pos > this.filteredItems.length) {
-        return 0;
-      }
+    const offset = this.filteredItems.slice(0, pos + 1)
+      .reverse()
+      .findIndex((item: MfSelectItem) => !this.isMfCategory(item) && !this.isDisabledItem(item));
+
+    // We found what we need
+    if (offset !== -1) {
+      return pos - offset;
     }
 
-    return pos;
+    return this.markedItem;
+  }
+
+  private findNextNonCategoryItem(pos: number): number | undefined {
+    // Make sure the position is between 0 and the length of the list
+    pos = Math.max(0, Math.min(this.filteredItems.length - 1, pos));
+
+    const offset = this.filteredItems.slice(pos)
+      .findIndex((item: MfSelectItem) => !this.isMfCategory(item) && !this.isDisabledItem(item));
+
+    // We found what we need
+    if (offset !== -1) {
+      return pos + offset;
+    }
+
+    return this.markedItem;
   }
 }

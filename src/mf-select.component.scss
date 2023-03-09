@@ -195,8 +195,14 @@
                 color: white;
             }
 
-            &:hover:not(.mf-marked):not(.mf-category) {
+            &:hover:not(.mf-marked):not(.mf-category):not(.mf-disabled-option) {
                 background-color: hsla(0, 0%, 0%, 0.15);
+            }
+
+            &.mf-disabled-option {
+                cursor: not-allowed;
+                color: #aaa;
+                background-color:hsla(0, 0%, 0%, 0.075);
             }
 
             .mf-highlighted {
