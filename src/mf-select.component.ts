@@ -98,6 +98,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   public isFocused: boolean = false;
 
+  public hasBeenOpened: boolean = false;
+
   public get selectedItem() {
     return this.model;
   }
@@ -261,6 +263,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public open(): void {
     if (this.isDisabled || this.isOpen || this.loading || this.observableLoading) { return; }
 
+    this.hasBeenOpened = true;
     this.isOpen = true;
 
     // Focus search
@@ -365,15 +368,34 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     return <HTMLElement>this.dropdownPanel.nativeElement;
   }
 
+  private getDropdownHeight(): number | null {
+    const dropdownPanel = this.getDropdownMenu();
+
+    if (!dropdownPanel) {
+      return null;
+    }
+
+    let dropdownHeight = dropdownPanel.getBoundingClientRect().height;
+
+    // If the virtual scroll component hasn't been added to the dom yet, manually account for its height
+    if (!this.virtualScrollComponent) {
+      // The option container height is the height of all rows, capped at 200 px
+      // Plus an extra 5 px for the top margin
+      const virtualScrollHeight = Math.min(200, this.optionRowHeight * this.filteredItems.length) + 5;
+      dropdownHeight += virtualScrollHeight;
+    }
+
+    return dropdownHeight;
+  }
+
 
   private autoPositionDropdown(): void {
     const selectRect = this.elementRef.nativeElement.getBoundingClientRect();
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const offsetTop = selectRect.top + window.pageYOffset;
     const height = selectRect.height;
-    const dropdownPanel = this.getDropdownMenu();
-    if (!dropdownPanel) { return; }
-    const dropdownHeight = dropdownPanel.getBoundingClientRect().height;
+    const dropdownHeight = this.getDropdownHeight();
+    if (dropdownHeight === null) { return; }
 
     if (offsetTop + height + dropdownHeight > scrollTop + document.documentElement.clientHeight) {
       this.currentDropdownPosition = 'top';
@@ -385,12 +407,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   private updateAppendedDropdownPosition(): void {
     const select: HTMLElement = this.elementRef.nativeElement;
     const dropdownPanel = this.getDropdownMenu();
+    const dropdownHeight = this.getDropdownHeight();
     if (!dropdownPanel) { return; }
     const parentRect = dropdownPanel.parentElement.getBoundingClientRect();
     const selectRect = select.getBoundingClientRect();
     const offsetTop = selectRect.top - parentRect.top;
     const offsetLeft = selectRect.left - parentRect.left;
-    const topDelta = this.currentDropdownPosition === 'top' ? -(dropdownPanel.getBoundingClientRect().height + 6) : selectRect.height;
+    const topDelta = this.currentDropdownPosition === 'top' ? -(dropdownHeight + 6) : selectRect.height;
     // console.log(parentRect, selectRect, offsetTop, offsetLeft, topDelta);
     dropdownPanel.style.top = offsetTop + topDelta + 'px';
     dropdownPanel.style.bottom = 'auto';
