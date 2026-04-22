@@ -57,7 +57,9 @@
       </div>
     </div>
 
-    <virtual-scroll class='mf-option-container'
+    <virtual-scroll
+      *ngIf='hasBeenOpened'
+      class='mf-option-container'
       [bufferAmount]='4'
       [items]='filteredItems'
       [scrollAnimationTime]='500'
