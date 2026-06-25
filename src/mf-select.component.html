@@ -57,14 +57,15 @@
       </div>
     </div>
 
-    <virtual-scroll
+    <virtual-scroller
       *ngIf='hasBeenOpened'
       class='mf-option-container'
+      [style.height]='optionContainerHeight'
       [bufferAmount]='4'
       [items]='filteredItems'
       [scrollAnimationTime]='500'
       [childHeight]='optionRowHeight'
-      (update)='viewPortItems = $event'
+      (vsUpdate)='viewPortItems = $event'
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
         *ngFor='let item of viewPortItems;'
@@ -84,7 +85,7 @@
           [ngTemplateOutletContext]='{ select: this, item: item }'
         ></ng-container>
       </div>
-    </virtual-scroll>
+    </virtual-scroller>
   </div>
 </div>
 

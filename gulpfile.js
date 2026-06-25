@@ -1,27 +1,28 @@
 /* eslint-disable */
 var gulp = require('gulp'),
   path = require('path'),
-  ngc = require('@angular/compiler-cli/src/main').main,
   rollup = require('gulp-rollup'),
   rename = require('gulp-rename'),
   fs = require('fs-extra'),
-  runSequence = require('run-sequence'),
+  { execSync } = require('child_process'),
   inlineResources = require('./tools/gulp/inline-resources');
-  require('@angular/compiler-cli');
+
 const rootFolder = path.join(__dirname);
 const srcFolder = path.join(rootFolder, 'src');
 const tmpFolder = path.join(rootFolder, '.tmp');
 const buildFolder = path.join(rootFolder, 'build');
 const distFolder = path.join(rootFolder, 'dist');
+const ngcBin = path.join(rootFolder, 'node_modules', '.bin', 'ngc');
+const ngccBin = path.join(rootFolder, 'node_modules', '.bin', 'ngcc');
 
 /**
  * 1. Delete /dist folder
  */
-gulp.task('clean:dist', function () {
-
+gulp.task('clean:dist', function (done) {
   // Delete contents but not dist folder to avoid broken npm links
   // when dist directory is removed while npm link references it.
-  return fs.emptyDirSync(distFolder);
+  fs.emptyDirSync(distFolder);
+  done();
 });
 
 /**
@@ -43,16 +44,23 @@ gulp.task('inline-resources', function () {
     .then(() => inlineResources(tmpFolder));
 });
 
+/**
+ * 4a. Run ngcc to make View Engine libraries (e.g. ngx-virtual-scroller) Ivy-compatible.
+ *     This is normally handled automatically by the Angular CLI but must be run explicitly
+ *     in a custom build pipeline.
+ */
+gulp.task('ngcc', function (done) {
+  execSync(`"${ngccBin}" --properties es2015 browser module main --first-only --create-ivy-entry-points`, { stdio: 'inherit' });
+  done();
+});
 
 /**
- * 4. Run the Angular compiler, ngc, on the /.tmp folder. This will output all
+ * 4b. Run the Angular compiler, ngc, on the /.tmp folder. This will output all
  *    compiled modules to the /build folder.
- *
- *    As of Angular 5, ngc accepts an array and no longer returns a promise.
  */
-gulp.task('ngc', function () {
-  ngc([ '--project', `${tmpFolder}/tsconfig.es5.json` ]);
-  return Promise.resolve()
+gulp.task('ngc', function (done) {
+  execSync(`"${ngcBin}" --project "${tmpFolder}/tsconfig.es5.json"`, { stdio: 'inherit' });
+  done();
 });
 
 /**
@@ -61,30 +69,15 @@ gulp.task('ngc', function () {
  */
 gulp.task('rollup:fesm', function () {
   return gulp.src(`${buildFolder}/**/*.js`)
-  // transform the files here.
     .pipe(rollup({
-
-      // Bundle's entry point
-      // See "input" in https://rollupjs.org/#core-functionality
       input: `${buildFolder}/index.js`,
-
-      // Allow mixing of hypothetical and actual files. "Actual" files can be files
-      // accessed by Rollup or produced by plugins further down the chain.
-      // This prevents errors like: 'path/file' does not exist in the hypothetical file system
-      // when subdirectories are used in the `src` directory.
       allowRealFiles: true,
-
-      // A list of IDs of modules that should remain external to the bundle
-      // See "external" in https://rollupjs.org/#core-functionality
       external: [
         '@angular/core',
         '@angular/common',
         '@angular/forms',
-        'angular2-virtual-scroll',
+        'ngx-virtual-scroller',
       ],
-
-      // Format of generated bundle
-      // See "format" in https://rollupjs.org/#core-functionality
       output: {
         format: 'es'
       }
@@ -98,48 +91,23 @@ gulp.task('rollup:fesm', function () {
  */
 gulp.task('rollup:umd', function () {
   return gulp.src(`${buildFolder}/**/*.js`)
-  // transform the files here.
     .pipe(rollup({
-
-      // Bundle's entry point
-      // See "input" in https://rollupjs.org/#core-functionality
       input: `${buildFolder}/index.js`,
-
-      // Allow mixing of hypothetical and actual files. "Actual" files can be files
-      // accessed by Rollup or produced by plugins further down the chain.
-      // This prevents errors like: 'path/file' does not exist in the hypothetical file system
-      // when subdirectories are used in the `src` directory.
       allowRealFiles: true,
-
-      // A list of IDs of modules that should remain external to the bundle
-      // See "external" in https://rollupjs.org/#core-functionality
       external: [
         '@angular/core',
         '@angular/common',
         '@angular/forms',
-        'angular2-virtual-scroll',
+        'ngx-virtual-scroller',
       ],
-
       output: {
-        // Format of generated bundle
-        // See "format" in https://rollupjs.org/#core-functionality
         format: 'umd',
-
-        // Export mode to use
-        // See "exports" in https://rollupjs.org/#danger-zone
         exports: 'named',
-
-        // The name to use for the module for UMD/IIFE bundles
-        // (required for bundles with exports)
-        // See "name" in https://rollupjs.org/#core-functionality
         name: 'mf-select',
-
-        // See "globals" in https://rollupjs.org/#core-functionality
         globals: {
           typescript: 'ts'
         }
       }
-
     }))
     .on('error', function (error) {
       console.error(error.toString());
@@ -150,7 +118,7 @@ gulp.task('rollup:umd', function () {
 
 /**
  * 7. Copy all the files from /build to /dist, except .js files. We ignore all .js from /build
- *    because with don't need individual modules anymore, just the Flat ES module generated
+ *    because we don't need individual modules anymore, just the Flat ES module generated
  *    on step 5.
  */
 gulp.task('copy:build', function () {
@@ -177,76 +145,59 @@ gulp.task('copy:readme', function () {
 /**
  * 10. Delete /.tmp folder
  */
-gulp.task('clean:tmp', function () {
-  return deleteFolder(tmpFolder);
+gulp.task('clean:tmp', function (done) {
+  deleteFolder(tmpFolder);
+  done();
 });
 
 /**
  * 11. Delete /build folder
  */
-gulp.task('clean:build', function () {
-  return deleteFolder(buildFolder);
+gulp.task('clean:build', function (done) {
+  deleteFolder(buildFolder);
+  done();
 });
 
-gulp.task('compile', function () {
-  runSequence(
-    'clean:dist',
-    'copy:source',
-    'inline-resources',
-    'ngc',
-    'rollup:umd',
-    'copy:build',
-    'clean:build',
-    'clean:tmp',
-    function (err) {
-      if (err) {
-        console.log('ERROR:', err.message);
-        deleteFolder(distFolder);
-        deleteFolder(tmpFolder);
-        deleteFolder(buildFolder);
-      } else {
-        console.log('Compilation finished succesfully');
-      }
-    });
-});
+gulp.task('compile', gulp.series(
+  'clean:dist',
+  'copy:source',
+  'inline-resources',
+  'ngcc',
+  'ngc',
+  'rollup:umd',
+  'copy:build',
+  'copy:manifest',
+  'clean:build',
+  'clean:tmp'
+));
 
-gulp.task('compile:dist', function () {
-  runSequence(
-    'clean:dist',
-    'copy:source',
-    'inline-resources',
-    'ngc',
-    'rollup:fesm',
-    'rollup:umd',
-    'copy:build',
-    'copy:manifest',
-    'copy:readme',
-    'clean:build',
-    'clean:tmp',
-    function (err) {
-      if (err) {
-        console.log('ERROR:', err.message);
-        deleteFolder(distFolder);
-        deleteFolder(tmpFolder);
-        deleteFolder(buildFolder);
-      } else {
-        console.log('Compilation finished succesfully');
-      }
-    });
-});
+gulp.task('compile:dist', gulp.series(
+  'clean:dist',
+  'copy:source',
+  'inline-resources',
+  'ngcc',
+  'ngc',
+  'rollup:fesm',
+  'rollup:umd',
+  'copy:build',
+  'copy:manifest',
+  'copy:readme',
+  'clean:build',
+  'clean:tmp'
+));
 
 /**
  * Watch for any change in the /src folder and compile files
  */
 gulp.task('watch', function () {
-  gulp.watch(`${srcFolder}/**/*`, ['compile']);
+  return gulp.watch(`${srcFolder}/**/*`, gulp.series('compile'));
 });
 
-gulp.task('clean', ['clean:dist', 'clean:tmp', 'clean:build']);
+gulp.task('clean', gulp.parallel('clean:dist', 'clean:tmp', 'clean:build'));
 
-gulp.task('build', ['clean', 'compile:dist']);
-gulp.task('build:watch', ['clean', 'compile', 'watch']);
-gulp.task('default', ['build:watch']);
+gulp.task('build', gulp.series('clean', 'compile:dist'));
+gulp.task('build:watch', gulp.series('clean', 'compile', 'watch'));
+gulp.task('default', gulp.series('build:watch'));
 
 /**
  * Deletes the specified folder

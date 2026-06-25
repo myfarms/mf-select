@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import { Observable, isObservable } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { VirtualScrollComponent } from 'angular2-virtual-scroll';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 export type MfSelectItem = string | object;
 
@@ -76,7 +76,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @ViewChild('dropdownPanel', {static: false}) private dropdownPanel: ElementRef;
   @ViewChild('searchInput', {static: false})  private searchInput: ElementRef;
-  @ViewChild(VirtualScrollComponent, {static: false}) private virtualScrollComponent: VirtualScrollComponent;
+  @ViewChild(VirtualScrollerComponent, {static: false}) private virtualScrollComponent: VirtualScrollerComponent;
 
   @Input() public searchTemplateLeft: TemplateRef<any>;
   @Input() public searchTemplateRight: TemplateRef<any>;
@@ -106,14 +106,14 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   private _items: MfSelectItem[] = [];
 
-  private observableLoading: boolean = false;
+  public observableLoading: boolean = false;
   private model: MfSelectItem = null;
   private _markedItem: number = 0;
-  private set markedItem(val: number) {
+  public set markedItem(val: number) {
     val = this.findNextNonCategoryItem(val);
     this._markedItem = Math.max(val, 0);
   }
-  private get markedItem(): number {
+  public get markedItem(): number {
     return this._markedItem;
   }
 
@@ -447,7 +447,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     return itemsWithCategories;
   }
 
-  private isMfCategory(item: MfSelectItem): item is MfCategory {
+  public get optionContainerHeight(): string {
+    return Math.min(200, this.filteredItems.length * this.optionRowHeight) + 'px';
+  }
+
+  public isMfCategory(item: MfSelectItem): item is MfCategory {
     return item && (<MfCategory> item).categoryName !== undefined;
   }
 

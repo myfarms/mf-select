@@ -18,10 +18,6 @@
     "types": []
   },
   "angularCompilerOptions": {
-    "annotateForClosureCompiler": true,
-    "strictMetadataEmit": true,
-    "enableIvy": false,
-    "skipTemplateCodegen": true,
     "flatModuleOutFile": "mf-select.js",
     "flatModuleId": "@myfarms/mf-select"
   },

@@ -1,6 +1,7 @@
 /**
  * This is only for local test
  */
+import '@angular/compiler'; // must be first — tells the JIT engine it's available before any Angular modules load
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Component } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

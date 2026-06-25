@@ -1,17 +1,18 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VirtualScrollModule } from 'angular2-virtual-scroll';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { MfSelectComponent } from './mf-select.component';
 import { MfOptionHighlightDirective } from './mf-option-highlight.directive';
 // import { MfSelectService } from './mf-select.service';
 
 export * from './mf-select.component';
+export * from './mf-option-highlight.directive';
 
 @NgModule({
   imports: [
     CommonModule,
-    VirtualScrollModule,
+    VirtualScrollerModule,
   ],
   declarations: [
     MfSelectComponent,
