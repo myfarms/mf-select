@@ -1,6 +1,6 @@
 {
   "name": "@myfarms/mf-select",
-  "version": "1.7.5",
+  "version": "2.0.1",
   "scripts": {
     "build": "ng-packagr -p ng-package.json",
     "test": "jest",
