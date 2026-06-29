@@ -9,10 +9,11 @@ import { FormsModule } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
 import { take, mergeMap } from 'rxjs/operators';
 
-import { MfSelectModule }  from '../dist';
+import { MfSelectModule }  from '../src';
 
 @Component({
   selector: 'app',
+  standalone: false,
   templateUrl: './app.html',
 })
 class AppComponent {

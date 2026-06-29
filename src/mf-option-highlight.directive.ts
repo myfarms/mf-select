@@ -1,14 +1,15 @@
-import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, inject, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 
 @Directive({
-  selector: '[mfOptionHighlight]'
+  selector: '[mfOptionHighlight]',
+  standalone: true,
 })
 export class MfOptionHighlightDirective implements OnChanges {
   @Input() public mfOptionHighlight: string;
   @Input() public innerHTML: string = '';
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
-  }
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   public ngOnChanges(changes: SimpleChanges): void {
     const label = this.mfOptionHighlight || '';

@@ -33,3 +33,5 @@ dist/*
 
 # Playground tmp files
 .playground
+playground/bundle.js
+playground/bundle.js.map

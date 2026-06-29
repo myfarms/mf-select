@@ -57,23 +57,19 @@
       </div>
     </div>
 
-    <virtual-scroller
+    <cdk-virtual-scroll-viewport
       *ngIf='hasBeenOpened'
       class='mf-option-container'
       [style.height]='optionContainerHeight'
-      [bufferAmount]='4'
-      [items]='filteredItems'
-      [scrollAnimationTime]='500'
-      [childHeight]='optionRowHeight'
-      (vsUpdate)='viewPortItems = $event'
+      [itemSize]='optionRowHeight'
     >
       <div class='mf-option' role='option' (click)='selectItem(item)' (mousedown)='$event.preventDefault()'
-        *ngFor='let item of viewPortItems;'
+        *cdkVirtualFor='let item of filteredItems;'
         [class.mf-marked]='item === this.filteredItems[markedItem]'
         [class.mf-category]='isMfCategory(item)'
       >
         <ng-template #defaultCategoryTemplate>
-          <div [innerHTML]='item.categoryName' [mfOptionHighlight]='searchTerm'></div>
+          <div [innerHTML]='$any(item).categoryName' [mfOptionHighlight]='searchTerm'></div>
         </ng-template>
         <ng-template #defaultOptionTemplate>
           <div [innerHTML]='getLabel(item)' [mfOptionHighlight]='searchTerm'></div>
@@ -85,9 +81,8 @@
           [ngTemplateOutletContext]='{ select: this, item: item }'
         ></ng-container>
       </div>
-    </virtual-scroller>
+    </cdk-virtual-scroll-viewport>
   </div>
 </div>
-
 
 

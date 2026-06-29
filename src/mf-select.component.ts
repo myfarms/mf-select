@@ -8,6 +8,7 @@ import {
   ViewChild,
   ElementRef,
   forwardRef,
+  inject,
   OnInit,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
@@ -23,9 +24,11 @@ import {
   HostBinding,
   HostListener,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Observable, isObservable } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { MfOptionHighlightDirective } from './mf-option-highlight.directive';
 
 export type MfSelectItem = string | object;
 
@@ -47,6 +50,8 @@ export enum KeyCode {
   selector: 'mf-select',
   templateUrl: './mf-select.component.html',
   styleUrls: ['./mf-select.component.scss'],
+  standalone: true,
+  imports: [CommonModule, ScrollingModule, MfOptionHighlightDirective],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => MfSelectComponent),
@@ -76,7 +81,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   @ViewChild('dropdownPanel', {static: false}) private dropdownPanel: ElementRef;
   @ViewChild('searchInput', {static: false})  private searchInput: ElementRef;
-  @ViewChild(VirtualScrollerComponent, {static: false}) private virtualScrollComponent: VirtualScrollerComponent;
+  @ViewChild(CdkVirtualScrollViewport, {static: false}) private virtualScrollViewport: CdkVirtualScrollViewport;
 
   @Input() public searchTemplateLeft: TemplateRef<any>;
   @Input() public searchTemplateRight: TemplateRef<any>;
@@ -89,7 +94,6 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   public searchTerm: string = '';
   public filteredItems: MfSelectItem[] = [];
   public currentDropdownPosition: 'bottom' | 'top' | 'auto';
-  public viewPortItems: MfSelectItem[] = [];
 
   @HostBinding('class') public parentClass = 'mf-select';
   @HostBinding('class.open') public isOpen: boolean = false;
@@ -120,10 +124,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   private onChange = (_: MfSelectItem) => { };
   private onTouched = () => { };
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private elementRef: ElementRef
-  ) {}
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private elementRef = inject(ElementRef);
 
   public ngOnInit(): void {
     this.filteredItems = this._items || [];
@@ -162,9 +164,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
             this.markedItem += 1;
           }
 
-          if (!(<any>this.changeDetectorRef).destroyed) {
-            this.changeDetectorRef.detectChanges();
-          }
+          this.changeDetectorRef.markForCheck();
         });
       } else {
         this._items = changes.items.currentValue;
@@ -228,13 +228,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       case 'ArrowDown':
         this.open();
         this.markedItem = this.markedItem < this.filteredItems.length - 1 ? this.markedItem + 1 : this.markedItem;
-        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        this.virtualScrollViewport?.scrollToIndex(this.markedItem);
         $event.preventDefault();
         break;
       case 'ArrowUp':
         // Also skip over any categories when moving upward
         this.markedItem += this.isMfCategory(this.filteredItems[this.markedItem - 1]) ? -2 : -1;
-        this.virtualScrollComponent.scrollInto(this.filteredItems[this.markedItem]);
+        this.virtualScrollViewport?.scrollToIndex(this.markedItem);
         $event.preventDefault();
         break;
       case 'Space':
@@ -336,10 +336,7 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.model = value;
     this.markedItem = this.filteredItems.indexOf(this.model);
 
-    if (!(<any>this.changeDetectorRef).destroyed) {
-      this.changeDetectorRef.detectChanges();
-    }
-
+    this.changeDetectorRef.markForCheck();
     this.update.emit(value);
   }
 
@@ -377,8 +374,8 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
     let dropdownHeight = dropdownPanel.getBoundingClientRect().height;
 
-    // If the virtual scroll component hasn't been added to the dom yet, manually account for its height
-    if (!this.virtualScrollComponent) {
+    // If the virtual scroll viewport hasn't been added to the dom yet, manually account for its height
+    if (!this.virtualScrollViewport) {
       // The option container height is the height of all rows, capped at 200 px
       // Plus an extra 5 px for the top margin
       const virtualScrollHeight = Math.min(200, this.optionRowHeight * this.filteredItems.length) + 5;

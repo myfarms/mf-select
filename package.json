@@ -2,32 +2,31 @@
   "name": "@myfarms/mf-select",
   "version": "1.7.5",
   "scripts": {
-    "build": "gulp build",
-    "build:watch": "gulp",
-    "docs": "npm run docs:build",
-    "docs:build": "compodoc -p tsconfig.json -n @myfarms/mf-select -d docs --hideGenerator",
-    "docs:serve": "npm run docs:build -- -s",
-    "docs:watch": "npm run docs:build -- -s -w",
-    "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
-    "lite": "lite-server",
-    "playground:build": "wait-on dist/mf-select.umd.js && webpack --config playground/webpack.config.js --watch",
-    "playground": "concurrently --kill-others \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
+    "build": "ng-packagr -p ng-package.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:ci": "jest --runInBand"
+    "test:ci": "jest --runInBand",
+    "lite": "lite-server",
+    "playground:build": "webpack --config playground/webpack.config.js --watch",
+    "playground": "concurrently --kill-others \"npm run playground:build\" \"npm run lite\""
   },
   "jest": {
     "preset": "jest-preset-angular",
     "setupFilesAfterEnv": [
       "<rootDir>/src/jest.ts"
     ],
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "<rootDir>/src/tsconfig.spec.json"
-      }
+    "transform": {
+      "^.+\\.(ts|mjs|js|html)$": [
+        "jest-preset-angular",
+        {
+          "tsconfig": "<rootDir>/tsconfig.spec.json",
+          "stringifyContentPathRegex": "\\.(html|svg)$"
+        }
+      ]
     },
     "modulePathIgnorePatterns": [
-      "<rootDir>/src/package.json"
+      "<rootDir>/src/package.json",
+      "<rootDir>/dist/"
     ]
   },
   "repository": {
@@ -59,45 +58,42 @@
   "bugs": {
     "url": "https://github.com/myfarms/mf-select/issues"
   },
+  "peerDependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/cdk": "^20.0.0",
+    "rxjs": "^7.8.0",
+    "zone.js": "~0.15.0"
+  },
   "devDependencies": {
-    "@angular/common": "^13.0.0",
-    "@angular/compiler": "^13.0.0",
-    "@angular/compiler-cli": "^13.0.0",
-    "@angular/core": "^13.0.0",
-    "@angular/forms": "^13.0.0",
-    "@angular/platform-browser": "^13.0.0",
-    "@angular/platform-browser-dynamic": "^13.0.0",
-    "@compodoc/compodoc": "^1.1.11",
-    "@types/jest": "^28.0.0",
-    "@types/node": "16.11.7",
-    "concurrently": "^3.6.1",
-    "core-js": "^3.0.0",
-    "del": "^2.2.2",
-    "fs-extra": "^5.0.0",
-    "gulp": "^4.0.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-rollup": "^2.17.0",
-    "jest": "^28.0.0",
-    "jest-environment-jsdom": "^28.1.3",
-    "jest-preset-angular": "^12.0.0",
-    "lite-server": "^2.5.4",
-    "node-watch": "^0.5.9",
-    "rollup": "^0.49.3",
-    "rxjs": "^6.6.3",
-    "sass": "~1.77.0",
+    "@angular/cdk": "^20.0.0",
+    "@angular/common": "20.3.25",
+    "@angular/compiler": "20.3.25",
+    "@angular/compiler-cli": "20.3.25",
+    "@angular/core": "20.3.25",
+    "@angular/forms": "20.3.25",
+    "@angular/platform-browser": "20.3.25",
+    "@angular/platform-browser-dynamic": "20.3.25",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "jest-preset-angular": "^14.0.0",
+    "css-loader": "^6.0.0",
+    "concurrently": "^8.0.0",
+    "lite-server": "^2.6.1",
+    "ng-packagr": "^20.0.0",
     "ts-loader": "^9.0.0",
-    "ts-node": "^10.0.0",
-    "tslint": "~5.7.0",
-    "typescript": "~4.4.4",
-    "wait-on": "^8.0.0",
     "webpack": "^5.0.0",
-    "webpack-cli": "^4.0.0",
-    "zone.js": "~0.11.4"
+    "webpack-cli": "^5.0.0",
+    "rxjs": "^7.8.0",
+    "sass": "~1.77.0",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.0.0",
+    "typescript": "~5.8.0",
+    "zone.js": "~0.15.0"
   },
   "engines": {
-    "node": ">=12.20.0"
-  },
-  "dependencies": {
-    "ngx-virtual-scroller": "^4.0.0"
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   }
 }
