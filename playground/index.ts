@@ -1,6 +1,7 @@
 /**
  * This is only for local test
  */
+import '../src/mf-select.component.scss';
 import '@angular/compiler'; // must be first — tells the JIT engine it's available before any Angular modules load
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Component } from '@angular/core';
