@@ -183,10 +183,12 @@
 
     .mf-option-container {
         margin-top: 5px;
+        overflow-x: hidden;
 
         .mf-option {
             cursor: pointer;
             padding: 2px 7px;
+            word-break: break-word;
 
             &.mf-marked {
                 background-color: hsla(134, 100%, 32%, 0.75);
