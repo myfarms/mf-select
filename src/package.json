@@ -1,6 +1,6 @@
 {
   "name": "@myfarms/mf-select",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/myfarms/mf-select"
@@ -21,6 +21,10 @@
     {
       "name": "Dylan Hamilton",
       "email": "dylan.hamilton@myfarms.com"
+    },
+    {
+      "name": "Tyler Sowards",
+      "email": "tyler.sowards@myfarms.com"
     }
   ],
   "keywords": [

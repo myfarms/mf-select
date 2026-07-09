@@ -1,6 +1,6 @@
 {
   "name": "@myfarms/mf-select",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "scripts": {
     "build": "ng-packagr -p ng-package.json",
     "test": "jest",
@@ -49,6 +49,10 @@
     {
       "name": "Dylan Hamilton",
       "email": "dylan.hamilton@myfarms.com"
+    },
+    {
+      "name": "Tyler Sowards",
+      "email": "tyler.sowards@myfarms.com"
     }
   ],
   "keywords": [

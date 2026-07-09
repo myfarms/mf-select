@@ -305,6 +305,11 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       this.markedItem = 0;
     }
 
+    // detect changes and update the viewport size
+    // otherwise, our virutal scroll component might assume the dropdown height is smaller
+    // than it actually is, causing it to not render enough rows
+    this.changeDetectorRef.detectChanges();
+    this.virtualScrollViewport?.checkViewportSize();
   }
 
   public selectItem(item: MfSelectItem): void {

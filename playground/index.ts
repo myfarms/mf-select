@@ -88,6 +88,13 @@ class AppComponent {
   public onChange(item: any) {
     console.log('onChange:', item);
   }
+
+  public dynamicItems: string[] = [];
+  public dynamicItemCount: number = 0;
+  public addDynamicItem() {
+    this.dynamicItemCount++;
+    this.dynamicItems = [...this.dynamicItems, `Item ${this.dynamicItemCount}`];
+  }
 }
 
 @NgModule({

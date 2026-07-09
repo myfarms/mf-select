@@ -70,6 +70,14 @@ Model: {{ ngModelObject | json }}
   <mf-select [items]='stringItems' [searchTemplateRight]='buttonTemplate' #select></mf-select>
 </div>
 
+<h2>Dynamic Dropdown Height</h2>
+<div style='margin: 100px; width: 500px'>
+  <ng-template #addButton>
+    <button class='btn btn-primary' (click)='addDynamicItem()'>+</button>
+  </ng-template>
+  <mf-select [items]='dynamicItems' [searchTemplateRight]='addButton'></mf-select>
+</div>
+
 <h2>Custom Templates</h2>
 <div style='margin: 100px; width: 500px'>
   <ng-template #option let-item='item'>
