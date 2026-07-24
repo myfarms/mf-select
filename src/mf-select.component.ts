@@ -269,6 +269,9 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     // Focus search
     setTimeout(() => {
       this.searchInput.nativeElement.focus();
+
+      // also update the viewport size so that rows are rendered correctly
+      this.virtualScrollViewport?.checkViewportSize();
     });
 
     if (this.dropdownPosition === 'auto') {
@@ -308,8 +311,13 @@ export class MfSelectComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     // detect changes and update the viewport size
     // otherwise, our virutal scroll component might assume the dropdown height is smaller
     // than it actually is, causing it to not render enough rows
-    this.changeDetectorRef.detectChanges();
-    this.virtualScrollViewport?.checkViewportSize();
+    // Only do this when the dropdown is open to fix issues when the mf-select
+    // is first loaded, where the synchronous change detection happens at the same time
+    // as the form control's write value, causing both placeholder and selected item to appear at the same time
+    if (this.isOpen) {
+      this.changeDetectorRef.detectChanges();
+      this.virtualScrollViewport?.checkViewportSize();
+    }
   }
 
   public selectItem(item: MfSelectItem): void {
